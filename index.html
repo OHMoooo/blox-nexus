@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OHMSHOP | ร้านขายรหัส Roblox อัตโนมัติ 24/7</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -177,7 +178,6 @@
                 <p class="text-xs sm:text-sm text-slate-400">เลือกไอดีที่ต้องการ ระบบจัดส่งรหัสทันทีหลังชำระเงิน</p>
             </div>
 
-            <!-- Filter Tabs -->
             <div class="flex gap-2 overflow-x-auto pb-1">
                 <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shrink-0">
                     ทั้งหมด
@@ -253,7 +253,7 @@
                     <span class="text-xl">👑</span>
                     <div>
                         <h3 class="text-lg font-bold text-amber-300">ระบบจัดการหลังบ้าน OHMSHOP</h3>
-                        <p class="text-[11px] text-slate-400">สิทธิ์ผู้ดูแลระบบสูงสุด: <span class="text-white font-bold">OHM</span></p>
+                        <p class="text-[11px] text-slate-400">เชื่อมต่อฐานข้อมูลออนไลน์ Supabase แบบเรียลไทม์</p>
                     </div>
                 </div>
                 <button onclick="closeModal('admin-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
@@ -261,7 +261,10 @@
 
             <!-- Credit Management Section -->
             <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4 mb-5">
-                <h4 class="text-sm font-bold text-cyan-400 mb-3">💳 ปรับเครดิตสมาชิก</h4>
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-sm font-bold text-cyan-400">💳 ปรับเครดิตสมาชิก (ข้ามเครื่อง)</h4>
+                    <button onclick="renderAdminPanel()" class="text-xs text-amber-300 hover:underline">🔄 รีเฟรชรายชื่อ</button>
+                </div>
                 <div class="space-y-2.5">
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">เลือกบัญชีสมาชิกที่ต้องการปรับยอด</label>
@@ -288,8 +291,8 @@
             <!-- Member List Overview -->
             <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4">
                 <div class="flex items-center justify-between mb-2.5">
-                    <h4 class="text-sm font-bold text-purple-400">👥 รายชื่อสมาชิกทั้งหมดในระบบ</h4>
-                    <span id="total-members-count" class="text-xs text-slate-400">0 คน</span>
+                    <h4 class="text-sm font-bold text-purple-400">👥 สมาชิกทั้งหมดในฐานข้อมูลออนไลน์</h4>
+                    <span id="total-members-count" class="text-xs text-slate-400">กำลังโหลด...</span>
                 </div>
                 <div id="admin-members-list" class="space-y-2 max-h-48 overflow-y-auto text-xs"></div>
             </div>
@@ -337,7 +340,7 @@
                 <h3 class="text-lg font-bold text-white">เติมเครดิต OHMSHOP</h3>
                 <button onclick="closeModal('topup-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <p class="text-xs sm:text-sm text-slate-400 mb-4">รองรับซองอั่งเปา TrueMoney Wallet และโอนเงินพร้อมเพย์ (แอดมินสามารถปรับยอดให้ได้ทันที)</p>
+            <p class="text-xs sm:text-sm text-slate-400 mb-4">วางลิงก์ซองอั่งเปา TrueMoney Wallet หรือแจ้งสลิปโอนเงิน เพื่อให้แอดมินเพิ่มเครดิตให้บัญชีของคุณ</p>
             <input id="topup-link" type="text" placeholder="วางลิงก์ซองอั่งเปา TrueMoney..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white mb-4 focus:outline-none focus:border-cyan-400">
             <button onclick="submitTopup()" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition">
                 แจ้งเติมเงิน
@@ -357,6 +360,11 @@
     </div>
 
     <script>
+        const SUPABASE_URL = 'https://klenkfjwswcjaioqlpbb.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_jc1xx57GMPs7YdRkQL8_cQ_MqhFsNu-';
+
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const catalog = [
             {
                 id: 1,
@@ -420,62 +428,43 @@
             }
         ];
 
-        // ตั้งค่าบัญชีเริ่มต้นในระบบ (มีบัญชี Admin: OHM / 12345 ฝังไว้เสมอ)
         const ADMIN_USERNAME = 'OHM';
-        const ADMIN_PASSWORD = '12345';
-
-        function getUsersDB() {
-            let users = JSON.parse(localStorage.getItem('ohmshop_users_db')) || [];
-            // ตรวจสอบว่ามีบัญชีแอดมิน OHM อยู่ในฐานข้อมูลหรือยัง ถ้ายังไม่มีให้สร้างอัตโนมัติ
-            const adminIndex = users.findIndex(u => u.username === ADMIN_USERNAME);
-            if (adminIndex === -1) {
-                users.unshift({
-                    username: ADMIN_USERNAME,
-                    password: ADMIN_PASSWORD,
-                    email: 'admin@ohmshop.store',
-                    credit: 99999,
-                    role: 'admin'
-                });
-                localStorage.setItem('ohmshop_users_db', JSON.stringify(users));
-            }
-            return users;
-        }
-
-        function saveUsersDB(users) {
-            localStorage.setItem('ohmshop_users_db', JSON.stringify(users));
-        }
 
         let cart = [];
         let discount = 0;
         let authMode = 'login';
-        let currentUsername = localStorage.getItem('ohmshop_current_user') || null;
-        let orderHistory = JSON.parse(localStorage.getItem('ohmshop_history')) || [];
+        let currentUser = null;
 
-        function getCurrentUserObj() {
-            if (!currentUsername) return null;
-            const users = getUsersDB();
-            return users.find(u => u.username === currentUsername) || null;
+        async function initApp() {
+            const savedUsername = localStorage.getItem('ohmshop_current_user');
+            if (savedUsername) {
+                await refreshCurrentUser(savedUsername);
+            }
+            updateAuthUI();
+            renderCatalog(catalog);
+        }
+
+        async function refreshCurrentUser(username) {
+            const { data } = await db.from('ohmshop_users').select('*').eq('username', username).single();
+            if (data) currentUser = data;
         }
 
         function isAdmin() {
-            const user = getCurrentUserObj();
-            return user && user.username === ADMIN_USERNAME && user.role === 'admin';
+            return currentUser && currentUser.username === ADMIN_USERNAME && currentUser.role === 'admin';
         }
 
         function updateAuthUI() {
             const authBtn = document.getElementById('auth-btn');
             const userBadge = document.getElementById('user-badge');
             const adminNavBtn = document.getElementById('admin-nav-btn');
-            const user = getCurrentUserObj();
 
-            if (user) {
+            if (currentUser) {
                 authBtn.classList.add('hidden');
                 userBadge.classList.remove('hidden');
                 userBadge.classList.add('flex');
-                document.getElementById('user-display-name').innerText = user.username;
-                document.getElementById('user-credit').innerText = user.credit.toLocaleString();
+                document.getElementById('user-display-name').innerText = currentUser.username;
+                document.getElementById('user-credit').innerText = Number(currentUser.credit).toLocaleString();
 
-                // แสดงปุ่มหลังบ้านเฉพาะบัญชี Admin: OHM เท่านั้น
                 if (isAdmin()) {
                     adminNavBtn.classList.remove('hidden');
                     adminNavBtn.classList.add('flex');
@@ -522,47 +511,55 @@
             }
         }
 
-        function handleAuthSubmit(e) {
+        async function handleAuthSubmit(e) {
             e.preventDefault();
             const username = document.getElementById('auth-username').value.trim();
             const password = document.getElementById('auth-password').value.trim();
-            const email = document.getElementById('auth-email').value.trim();
-            const users = getUsersDB();
+            const email = document.getElementById('auth-email').value.trim() || '-';
 
             if (authMode === 'register') {
                 if (username.toUpperCase() === ADMIN_USERNAME) {
                     alert('ชื่อผู้ใช้นี้ถูกสงวนไว้สำหรับผู้ดูแลระบบ กรุณาใช้ชื่ออื่นครับ');
                     return;
                 }
-                if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                const { data: existing } = await db.from('ohmshop_users').select('username').ilike('username', username);
+                if (existing && existing.length > 0) {
                     alert('ชื่อผู้ใช้นี้มีคนใช้แล้ว กรุณาตั้งชื่ออื่นครับ');
                     return;
                 }
-                users.push({
-                    username: username,
-                    password: password,
-                    email: email || '-',
-                    credit: 0,
-                    role: 'member'
-                });
-                saveUsersDB(users);
-                currentUsername = username;
-                localStorage.setItem('ohmshop_current_user', currentUsername);
+
+                const { data: inserted, error } = await db.from('ohmshop_users').insert([
+                    { username, password, email, credit: 0, role: 'member' }
+                ]).select().single();
+
+                if (error) {
+                    alert('เกิดข้อผิดพลาดในการสมัครสมาชิก: ' + error.message);
+                    return;
+                }
+
+                currentUser = inserted;
+                localStorage.setItem('ohmshop_current_user', currentUser.username);
                 updateAuthUI();
                 closeModal('auth-modal');
                 alert(`สมัครสมาชิกสำเร็จ ยินดีต้อนรับคุณ ${username}!`);
             } else {
-                const found = users.find(u => u.username === username && u.password === password);
+                const { data: found } = await db.from('ohmshop_users')
+                    .select('*')
+                    .eq('username', username)
+                    .eq('password', password)
+                    .single();
+
                 if (!found) {
                     alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
                     return;
                 }
-                currentUsername = found.username;
-                localStorage.setItem('ohmshop_current_user', currentUsername);
+
+                currentUser = found;
+                localStorage.setItem('ohmshop_current_user', currentUser.username);
                 updateAuthUI();
                 closeModal('auth-modal');
                 if (isAdmin()) {
-                    alert('เข้าสู่ระบบผู้ดูแล (Admin: OHM) สำเร็จ! สามารถกดปุ่ม "👑 หลังบ้าน" ด้านบนเพื่อจัดการเครดิตสมาชิกได้ทันที');
+                    alert('เข้าสู่ระบบผู้ดูแล (Admin: OHM) สำเร็จ! กดปุ่ม "👑 หลังบ้าน" ด้านบนเพื่อจัดการเครดิตสมาชิกได้เลย');
                 } else {
                     alert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`);
                 }
@@ -570,31 +567,37 @@
         }
 
         function logoutUser() {
-            currentUsername = null;
+            currentUser = null;
             localStorage.removeItem('ohmshop_current_user');
             updateAuthUI();
         }
 
-        // ฟังก์ชันหลังบ้านสำหรับ Admin: OHM เท่านั้น
-        function openAdminModal() {
+        async function openAdminModal() {
             if (!isAdmin()) {
                 alert('เข้าถึงได้เฉพาะบัญชีผู้ดูแลระบบ (OHM) เท่านั้น!');
                 return;
             }
-            renderAdminPanel();
             const modal = document.getElementById('admin-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            await renderAdminPanel();
         }
 
-        function renderAdminPanel() {
-            const users = getUsersDB();
+        async function renderAdminPanel() {
             const select = document.getElementById('admin-user-select');
             const list = document.getElementById('admin-members-list');
+            document.getElementById('total-members-count').innerText = 'กำลังโหลด...';
+
+            const { data: users, error } = await db.from('ohmshop_users').select('*').order('id', { ascending: false });
+            if (error || !users) {
+                document.getElementById('total-members-count').innerText = 'โหลดไม่สำเร็จ';
+                return;
+            }
+
             document.getElementById('total-members-count').innerText = `${users.length} บัญชี`;
 
             select.innerHTML = users.map(u => `
-                <option value="${u.username}">${u.username} ${u.role === 'admin' ? '(Admin)' : ''} — คงเหลือ ฿${u.credit.toLocaleString()}</option>
+                <option value="${u.username}">${u.username} ${u.role === 'admin' ? '(Admin)' : ''} — คงเหลือ ฿${Number(u.credit).toLocaleString()}</option>
             `).join('');
 
             list.innerHTML = users.map(u => `
@@ -604,12 +607,12 @@
                         ${u.role === 'admin' ? '<span class="ml-1.5 text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">ADMIN</span>' : ''}
                         <div class="text-[11px] text-slate-500">รหัสผ่าน: ${u.password}</div>
                     </div>
-                    <div class="font-eng font-bold text-emerald-400 text-sm">฿${u.credit.toLocaleString()}</div>
+                    <div class="font-eng font-bold text-emerald-400 text-sm">฿${Number(u.credit).toLocaleString()}</div>
                 </div>
             `).join('');
         }
 
-        function adminAdjustCredit(action) {
+        async function adminAdjustCredit(action) {
             if (!isAdmin()) return;
             const targetUsername = document.getElementById('admin-user-select').value;
             const amount = parseFloat(document.getElementById('admin-credit-amount').value);
@@ -619,23 +622,25 @@
                 return;
             }
 
-            const users = getUsersDB();
-            const idx = users.findIndex(u => u.username === targetUsername);
-            if (idx === -1) return;
+            const { data: targetUser } = await db.from('ohmshop_users').select('*').eq('username', targetUsername).single();
+            if (!targetUser) return;
 
-            if (action === 'add') {
-                users[idx].credit += amount;
-            } else if (action === 'sub') {
-                users[idx].credit = Math.max(0, users[idx].credit - amount);
-            } else if (action === 'set') {
-                users[idx].credit = amount;
+            let newCredit = Number(targetUser.credit);
+            if (action === 'add') newCredit += amount;
+            else if (action === 'sub') newCredit = Math.max(0, newCredit - amount);
+            else if (action === 'set') newCredit = amount;
+
+            const { error } = await db.from('ohmshop_users').update({ credit: newCredit }).eq('username', targetUsername);
+            if (error) {
+                alert('อัปเดตเครดิตไม่สำเร็จ: ' + error.message);
+                return;
             }
 
-            saveUsersDB(users);
             document.getElementById('admin-credit-amount').value = '';
-            renderAdminPanel();
+            await refreshCurrentUser(currentUser.username);
             updateAuthUI();
-            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! ยอดคงเหลือปัจจุบันคือ ฿${users[idx].credit.toLocaleString()}`);
+            await renderAdminPanel();
+            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! ยอดคงเหลือปัจจุบันคือ ฿${newCredit.toLocaleString()}`);
         }
 
         function renderCatalog(items) {
@@ -746,9 +751,8 @@
             return total;
         }
 
-        function checkout() {
-            const user = getCurrentUserObj();
-            if (!user) {
+        async function checkout() {
+            if (!currentUser) {
                 closeModal('cart-modal');
                 alert('กรุณาเข้าสู่ระบบหรือสมัครสมาชิกก่อนสั่งซื้อครับ');
                 openAuthModal('login');
@@ -758,29 +762,30 @@
                 alert('กรุณาเลือกสินค้าใส่ตะกร้าก่อนครับ');
                 return;
             }
+
+            await refreshCurrentUser(currentUser.username);
+            updateAuthUI();
+
             const total = updateCartTotal();
-            if (user.credit < total) {
-                alert(`ยอดเครดิตไม่เพียงพอ (คงเหลือ ฿${user.credit} / ต้องชำระ ฿${total}) กรุณาเติมเครดิตก่อนครับ`);
+            if (Number(currentUser.credit) < total) {
+                alert(`ยอดเครดิตไม่เพียงพอ (คงเหลือ ฿${currentUser.credit} / ต้องชำระ ฿${total}) กรุณาเติมเครดิตก่อนครับ`);
                 closeModal('cart-modal');
                 openTopupModal();
                 return;
             }
 
-            const users = getUsersDB();
-            const idx = users.findIndex(u => u.username === user.username);
-            users[idx].credit -= total;
-            saveUsersDB(users);
-            updateAuthUI();
+            const newCredit = Number(currentUser.credit) - total;
+            await db.from('ohmshop_users').update({ credit: newCredit }).eq('username', currentUser.username);
 
-            cart.forEach(item => {
-                orderHistory.unshift({
-                    buyer: user.username,
-                    title: item.title,
-                    date: new Date().toLocaleString('th-TH'),
-                    account: 'เตรียมส่งจากฐานข้อมูล Supabase'
-                });
-            });
-            localStorage.setItem('ohmshop_history', JSON.stringify(orderHistory));
+            const orderRows = cart.map(item => ({
+                buyer: currentUser.username,
+                title: item.title,
+                account: 'รอแอดมิน/ระบบส่งรหัสเข้าประวัติ'
+            }));
+            await db.from('ohmshop_orders').insert(orderRows);
+
+            await refreshCurrentUser(currentUser.username);
+            updateAuthUI();
 
             cart = [];
             discount = 0;
@@ -791,7 +796,7 @@
         }
 
         function openTopupModal() {
-            if (!getCurrentUserObj()) {
+            if (!currentUser) {
                 openAuthModal('login');
                 return;
             }
@@ -801,29 +806,35 @@
         }
 
         function submitTopup() {
-            alert('แจ้งเติมเงินเรียบร้อย! แอดมินสามารถเข้าไปกดเพิ่มเครดิตให้บัญชีของคุณในระบบหลังบ้านได้ทันที');
+            alert('แจ้งเติมเงินเรียบร้อย! แอดมิน OHM สามารถกดเพิ่มเครดิตให้คุณจากหน้าหลังบ้านได้ทันที');
             closeModal('topup-modal');
         }
 
-        function openHistoryModal() {
+        async function openHistoryModal() {
             const list = document.getElementById('history-list');
-            const user = getCurrentUserObj();
-            const userOrders = user ? orderHistory.filter(o => o.buyer === user.username) : [];
-
-            if (userOrders.length === 0) {
-                list.innerHTML = '<div class="text-center text-slate-500 py-6">ยังไม่มีประวัติการสั่งซื้อ</div>';
-            } else {
-                list.innerHTML = userOrders.map(o => `
-                    <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3">
-                        <div class="font-bold text-white">${o.title}</div>
-                        <div class="text-xs text-cyan-400 mt-1">ข้อมูลไอดี: ${o.account}</div>
-                        <div class="text-[11px] text-slate-500 mt-1">${o.date}</div>
-                    </div>
-                `).join('');
-            }
             const modal = document.getElementById('history-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+
+            if (!currentUser) {
+                list.innerHTML = '<div class="text-center text-slate-500 py-6">กรุณาเข้าสู่ระบบเพื่อดูประวัติการสั่งซื้อ</div>';
+                return;
+            }
+
+            list.innerHTML = '<div class="text-center text-slate-400 py-6">กำลังโหลดประวัติ...</div>';
+            const { data: orders } = await db.from('ohmshop_orders').select('*').eq('buyer', currentUser.username).order('id', { ascending: false });
+
+            if (!orders || orders.length === 0) {
+                list.innerHTML = '<div class="text-center text-slate-500 py-6">ยังไม่มีประวัติการสั่งซื้อ</div>';
+            } else {
+                list.innerHTML = orders.map(o => `
+                    <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3">
+                        <div class="font-bold text-white">${o.title}</div>
+                        <div class="text-xs text-cyan-400 mt-1">ข้อมูลไอดี: ${o.account}</div>
+                        <div class="text-[11px] text-slate-500 mt-1">${new Date(o.created_at).toLocaleString('th-TH')}</div>
+                    </div>
+                `).join('');
+            }
         }
 
         function closeModal(id) {
@@ -832,9 +843,7 @@
             modal.classList.remove('flex');
         }
 
-        getUsersDB();
-        updateAuthUI();
-        renderCatalog(catalog);
+        initApp();
     </script>
 </body>
 </html>
