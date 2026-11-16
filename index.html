@@ -6,2628 +6,323 @@
     <title>OHMSHOP | ร้านขายรหัส Roblox อัตโนมัติ 24 ชม.</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter + Kanit & Chakra Petch for Thai Gaming UI -->
+    <!-- Google Fonts: Inter + Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,700&family=Inter:wght@400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'Kanit', 'sans-serif'],
-                        gaming: ['Chakra Petch', 'Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        darkbg: '#09090b',
-                        cardbg: '#121217',
-                        neonblue: '#00f0ff',
-                        neonpurple: '#8b5cf6',
-                    },
-                    boxShadow: {
-                        'neon-blue': '0 0 18px rgba(0, 240, 255, 0.35)',
-                        'neon-purple': '0 0 22px rgba(139, 92, 246, 0.42)',
-                    }
-                }
-            }
-        };
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
+        body {
+            font-family: 'Kanit', 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
         }
-        canvas.qr-canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            image-rendering: pixelated;
+        .font-eng {
+            font-family: 'Inter', sans-serif;
         }
-        canvas.qr-custom-canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            image-rendering: auto;
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+        }
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            border-color: #22d3ee;
+            box-shadow: 0 10px 25px -5px rgba(34, 211, 238, 0.2);
         }
     </style>
 </head>
-<body class="bg-[#09090b] text-gray-100 font-sans antialiased selection:bg-purple-600 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950">
 
-    <!-- Offscreen / Accessible File Inputs -->
-    <input type="file" id="slip-upload-input" accept="image/*" style="position:fixed;left:-9999px;opacity:0.001;width:1px;height:1px;" aria-label="อัปโหลดสลิปโอนเงิน">
-    <input type="file" id="form-acc-image-file" accept="image/*" style="position:fixed;left:-9999px;opacity:0.001;width:1px;height:1px;" aria-label="อัปโหลดรูปภาพสินค้า">
-    <input type="file" id="admin-qr-file" accept="image/*" style="position:fixed;left:-9999px;opacity:0.001;width:1px;height:1px;" aria-label="อัปโหลดรูปภาพ QR Code">
-
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-3 max-w-[calc(100vw-2.5rem)] pointer-events-none"></div>
-
-    <!-- 1. Navbar -->
-    <nav class="sticky top-0 z-40 bg-[#09090b]/90 backdrop-blur-xl border-b border-purple-500/25">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20 gap-3 sm:gap-4">
-                <!-- Brand Logo -->
-                <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="resetFilters()">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center shadow-neon-purple">
-                        <i class="fa-solid fa-gamepad text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="font-gaming font-bold text-xl sm:text-2xl tracking-wider bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">BLOX-NEXUS</span>
-                        <span class="block text-[10px] text-cyan-400 tracking-widest uppercase -mt-1">Auto Store 24/7</span>
-                    </div>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-eng font-extrabold text-slate-950 text-lg shadow-lg shadow-cyan-500/30">
+                    O
                 </div>
+                <span class="font-eng font-extrabold text-xl tracking-wider bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent">
+                    OHMSHOP
+                </span>
+            </a>
 
-                <!-- Search Bar (Desktop) -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
-                    <div class="relative w-full">
-                        <input type="text" id="search-input" oninput="filterAccounts()" placeholder="ค้นหารหัส เช่น โมจิตื่น, เผ่า V4, โกโจ, ไก่ตัน..."
-                            class="w-full bg-[#16161d] border border-gray-800 focus:border-cyan-400 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
-                    </div>
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full text-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-slate-300">ระบบอัตโนมัติ 24 ชม.</span>
                 </div>
-
-                <!-- Right Actions -->
-                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                    <button type="button" onclick="openAdminAccess()" class="relative flex items-center gap-2 bg-[#16161d] hover:bg-[#1f1f29] border border-cyan-500/35 text-cyan-300 px-3 sm:px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all hover:border-cyan-400">
-                        <i class="fa-solid fa-user-shield text-cyan-400"></i>
-                        <span class="hidden lg:inline">หลังบ้าน (Admin)</span>
-                    </button>
-
-                    <button type="button" onclick="openHistoryModal()" class="relative flex items-center gap-2 bg-[#16161d] hover:bg-[#1f1f29] border border-purple-500/35 text-gray-200 px-3 sm:px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all hover:border-purple-400">
-                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i>
-                        <span class="hidden sm:inline">ประวัติการสั่งซื้อ</span>
-                        <span id="history-badge" class="hidden bg-purple-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
-                    </button>
-
-                    <button type="button" onclick="toggleCart(true)" class="relative flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-3.5 sm:px-4 py-2.5 rounded-xl text-sm font-semibold shadow-neon-purple transition-all active:scale-95">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="hidden sm:inline">ตะกร้าสินค้า</span>
-                        <span id="cart-count" class="bg-black/45 text-cyan-300 text-xs font-bold px-2 py-0.5 rounded-lg border border-cyan-400/30">0</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Search Bar (Mobile) -->
-            <div class="pb-3 md:hidden">
-                <div class="relative w-full">
-                    <input type="text" id="search-input-mobile" oninput="syncSearch(this.value)" placeholder="ค้นหารหัสเกม Roblox..."
-                        class="w-full bg-[#16161d] border border-gray-800 focus:border-cyan-400 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
-                </div>
+                <button onclick="openTopupModal()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-1.5 rounded-xl text-sm transition shadow-md shadow-cyan-500/20">
+                    + เติมเครดิต
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- 2. Hero Section -->
-    <section class="relative overflow-hidden border-b border-gray-800/80">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute top-1/2 -right-24 w-96 h-96 bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <!-- Hero Banner -->
+    <header class="relative overflow-hidden border-b border-slate-800/80 bg-gradient-to-b from-slate-900 via-[#090d16] to-[#090d16]">
+        <div class="max-w-6xl mx-auto px-4 py-12 sm:py-16 text-center">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs sm:text-sm font-medium mb-4">
+                ⚡ ส่งรหัสอัตโนมัติทันทีหลังชำระเงิน ปลอดภัย 100%
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-4">
+                ยินดีต้อนรับสู่ <span class="font-eng text-cyan-400">OHMSHOP</span>
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base mb-8">
+                แหล่งรวมรหัส Roblox คุณภาพสูง ไก่ตันตึงๆ ผลปีศาจครบ และไอเทมหายาก คัดสรรทุกไอดี เปลี่ยนรหัสได้ทันที
+            </p>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs sm:text-sm font-medium">
-                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                        โปรโมชั่นเปิดร้านใหม่! ใช้โค้ด <span class="font-gaming font-bold text-white bg-purple-600/80 px-2 py-0.5 rounded">NEXUS50</span> ลดทันที 50 บาท
-                    </div>
-
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-                        ศูนย์รวมรหัส <span class="font-gaming bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ROBLOX</span> <br>
-                        ระดับเทพ ราคาคุ้มที่สุด!
-                    </h1>
-
-                    <p class="text-gray-400 text-sm sm:text-lg max-w-2xl leading-relaxed">
-                        คัดสรรไอดีคุณภาพ ทั้งไก่ตันพร้อมฟาร์ม ผลถาวร เผ่า V4 ตัน และตัวยูนิตแรร์ ระบบจัดส่งรหัสอัตโนมัติทันทีหลังชำระเงิน ไม่ต้องรอแอดมินตอบ
-                    </p>
-
-                    <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
-                        <a href="#store-section" class="px-6 sm:px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-gray-950 font-bold text-sm sm:text-base shadow-neon-blue transition-all flex items-center gap-2">
-                            <i class="fa-solid fa-bolt"></i> เลือกซื้อรหัสเลย
-                        </a>
-                        <button type="button" onclick="copyPromoCode()" class="px-5 sm:px-6 py-3.5 rounded-xl bg-[#16161d] hover:bg-[#1e1e28] border border-purple-500/40 text-purple-300 font-medium text-sm sm:text-base transition-all flex items-center gap-2">
-                            <i class="fa-regular fa-copy"></i> คัดลอกโค้ดส่วนลด
-                        </button>
-                    </div>
-
-                    <!-- Store Highlights -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-gray-800/80">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                                <i class="fa-solid fa-robot text-lg"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-sm text-white">ส่งออโต้ 24 ชม.</h4>
-                                <p class="text-xs text-gray-400">รับไอดีทันทีใน 3 วิ</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
-                                <i class="fa-solid fa-shield-halved text-lg"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-sm text-white">ปลอดภัย 100%</h4>
-                                <p class="text-xs text-gray-400">ไอดีสะอาด ไม่ติดเมล</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                                <i class="fa-solid fa-headset text-lg"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-sm text-white">ประกันทุกไอดี</h4>
-                                <p class="text-xs text-gray-400">เคลมไว ดูแลตลอด</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto bg-slate-900/70 border border-slate-800 rounded-2xl p-4">
+                <div>
+                    <div class="font-eng font-bold text-xl sm:text-2xl text-cyan-400">1,250+</div>
+                    <div class="text-xs text-slate-400">ขายแล้วทั้งหมด</div>
                 </div>
-
-                <!-- Hero Featured Showcase Card -->
-                <div class="lg:col-span-5">
-                    <div class="relative rounded-2xl bg-gradient-to-b from-[#1a1a24] to-[#111116] p-1 border border-purple-500/40 shadow-neon-purple">
-                        <div class="bg-[#121218] rounded-xl p-5 space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span class="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs font-bold uppercase tracking-wider">
-                                    <i class="fa-solid fa-fire mr-1"></i> สินค้าแนะนำประจำวัน
-                                </span>
-                                <span class="text-xs text-cyan-400 font-gaming">#BF-901</span>
-                            </div>
-                            <div class="relative rounded-xl overflow-hidden h-48 bg-gray-900">
-                                <img src="https://placehold.co/600x350/1e1b4b/38bdf8?text=BLOX+FRUITS+GOD+ID"
-                                    onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e1b4b/38bdf8?text=BLOX+NEXUS';"
-                                    alt="Featured Roblox ID" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#121218] via-transparent to-transparent"></div>
-                                <div class="absolute bottom-3 left-3 flex flex-wrap gap-2">
-                                    <span class="px-2.5 py-1 rounded-md bg-purple-600/90 text-white text-xs font-medium backdrop-blur-sm">ผลถาวร 3 ผล</span>
-                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/90 text-gray-950 text-xs font-bold backdrop-blur-sm">เผ่า V4</span>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">Blox Fruits โมจิตื่น + เสือดาว + เผ่าไซบอร์ก V4</h3>
-                                <p class="text-xs text-gray-400 mt-1">เลเวล 2550 (ตัน) | ดาบคู่โอเด้ง CDK | เงินเบลี 45.8M+ | ไม่ผูกเมล</p>
-                            </div>
-                            <div class="flex items-center justify-between pt-2 border-t border-gray-800">
-                                <div>
-                                    <span class="text-xs text-gray-500 line-through">฿890</span>
-                                    <div class="text-2xl font-gaming font-bold text-cyan-400">฿590</div>
-                                </div>
-                                <button type="button" onclick="addToCart(1)" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all flex items-center gap-2">
-                                    <i class="fa-solid fa-cart-plus"></i> หยิบใส่ตะกร้า
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="border-x border-slate-800">
+                    <div class="font-eng font-bold text-xl sm:text-2xl text-emerald-400">99.9%</div>
+                    <div class="text-xs text-slate-400">ลูกค้าพึงพอใจ</div>
+                </div>
+                <div>
+                    <div class="font-eng font-bold text-xl sm:text-2xl text-purple-400">24/7</div>
+                    <div class="text-xs text-slate-400">จัดส่งอัตโนมัติ</div>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- 3. Filter & Store Section -->
-    <main id="store-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-        <div class="bg-[#121217] border border-gray-800/90 rounded-2xl p-4 sm:p-5 mb-8 space-y-5">
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <!-- Game Categories -->
-                <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2.5 font-semibold">
-                        <i class="fa-solid fa-layer-group text-cyan-400 mr-1.5"></i> เลือกหมวดหมู่เกมยอดฮิต
-                    </label>
-                    <div class="flex flex-wrap gap-2" id="category-filters">
-                        <button type="button" onclick="setCategory('all')" data-cat="all" class="cat-btn active px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-neon-purple transition-all">
-                            ทั้งหมด
-                        </button>
-                        <button type="button" onclick="setCategory('Blox Fruits')" data-cat="Blox Fruits" class="cat-btn px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a22] text-gray-300 hover:text-white border border-gray-800 hover:border-cyan-400/50 transition-all">
-                            🍎 Blox Fruits
-                        </button>
-                        <button type="button" onclick="setCategory('King Legacy')" data-cat="King Legacy" class="cat-btn px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a22] text-gray-300 hover:text-white border border-gray-800 hover:border-cyan-400/50 transition-all">
-                            👑 King Legacy
-                        </button>
-                        <button type="button" onclick="setCategory('Pet Simulator 99')" data-cat="Pet Simulator 99" class="cat-btn px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a22] text-gray-300 hover:text-white border border-gray-800 hover:border-cyan-400/50 transition-all">
-                            🐾 Pet Simulator 99
-                        </button>
-                        <button type="button" onclick="setCategory('Anime Defenders')" data-cat="Anime Defenders" class="cat-btn px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a22] text-gray-300 hover:text-white border border-gray-800 hover:border-cyan-400/50 transition-all">
-                            ⚔️ Anime Defenders
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Price Range Filter -->
-                <div class="w-full lg:w-72">
-                    <label for="price-filter" class="block text-xs text-gray-400 uppercase tracking-wider mb-2.5 font-semibold">
-                        <i class="fa-solid fa-tags text-purple-400 mr-1.5"></i> กรองช่วงราคา
-                    </label>
-                    <select id="price-filter" onchange="filterAccounts()" class="w-full bg-[#1a1a22] border border-gray-800 focus:border-purple-500 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none">
-                        <option value="all">ทุกราคา (แสดงทั้งหมด)</option>
-                        <option value="0-100">ไม่เกิน 100 บาท (งบประหยัด/ไก่ตัน)</option>
-                        <option value="101-300">101 - 300 บาท (คุ้มค่า)</option>
-                        <option value="301-600">301 - 600 บาท (ไอดีระดับเทพ)</option>
-                        <option value="601+">มากกว่า 600 บาท (ระดับสุลต่าน)</option>
-                    </select>
-                </div>
+    <!-- Main Product Grid -->
+    <main class="max-w-6xl mx-auto px-4 py-10 w-full flex-grow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">รายการรหัสพร้อมจำหน่าย</h2>
+                <p class="text-sm text-slate-400">เลือกแพ็กเกจที่ต้องการ ระบบจัดส่งข้อมูลเข้าสู่ระบบทันที</p>
             </div>
-
-            <!-- Active Filter Status & Count -->
-            <div class="flex items-center justify-between pt-3 border-t border-gray-800/80 text-xs text-gray-400">
-                <div>
-                    พบรายการรหัสทั้งหมด <span id="result-count" class="text-cyan-400 font-bold text-sm">0</span> ไอดี
-                </div>
-                <button type="button" onclick="resetFilters()" class="text-purple-400 hover:text-purple-300 flex items-center gap-1.5 py-1 px-2 rounded-lg transition-colors">
-                    <i class="fa-solid fa-rotate-right"></i> ล้างตัวกรองทั้งหมด
+            <!-- Category Filter -->
+            <div class="flex gap-2 overflow-x-auto pb-1">
+                <button onclick="filterProducts('all')" class="filter-btn active px-4 py-1.5 rounded-lg text-sm font-medium bg-cyan-500 text-slate-950">
+                    ทั้งหมด
+                </button>
+                <button onclick="filterProducts('bloxfruits')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700">
+                    Blox Fruits
+                </button>
+                <button onclick="filterProducts('random')" class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-slate-700">
+                    กล่องสุ่มคุ้มๆ
                 </button>
             </div>
         </div>
 
-        <!-- 4. Account Cards Grid -->
-        <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden text-center py-20 bg-[#121217] rounded-2xl border border-gray-800 px-4">
-            <div class="w-16 h-16 rounded-2xl bg-gray-800/80 flex items-center justify-center mx-auto mb-4 text-gray-500 text-2xl">
-                <i class="fa-solid fa-box-open"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white">ไม่พบรหัสเกมที่ตรงกับเงื่อนไข</h3>
-            <p class="text-sm text-gray-400 mt-1 mb-5">ลองเปลี่ยนคำค้นหา หมวดหมู่ หรือช่วงราคาใหม่อีกครั้ง</p>
-            <button type="button" onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium">
-                แสดงรหัสทั้งหมด
-            </button>
+        <!-- Product Cards Container -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Products will be rendered by JS -->
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-800/80 bg-[#070709] py-10 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
-                    <i class="fa-solid fa-gamepad text-white text-sm"></i>
-                </div>
-                <span class="font-gaming font-bold text-xl text-white">BLOX-NEXUS</span>
+    <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+            <div class="flex items-center gap-2">
+                <span class="font-eng font-bold text-white text-base">OHMSHOP</span>
+                <span>— ร้านบริการจำหน่ายรหัสเกมอัตโนมัติ</span>
             </div>
-            <p class="text-xs text-gray-500 text-center">
-                © 2026 BLOX-NEXUS Store. ระบบจำหน่ายไอดีเกมออนไลน์อัตโนมัติ 24 ชั่วโมง
-            </p>
-            <div class="flex gap-4 text-gray-400">
-                <button type="button" onclick="showToast('เปิดช่องทางติดต่อ Discord ของร้าน', 'info')" class="hover:text-cyan-400 p-2 transition-colors" aria-label="Discord"><i class="fa-brands fa-discord text-xl"></i></button>
-                <button type="button" onclick="showToast('เปิดเพจ Facebook ของร้าน', 'info')" class="hover:text-blue-400 p-2 transition-colors" aria-label="Facebook"><i class="fa-brands fa-facebook text-xl"></i></button>
-                <button type="button" onclick="showToast('เปิด Line Official ของร้าน', 'info')" class="hover:text-emerald-400 p-2 transition-colors" aria-label="Line"><i class="fa-brands fa-line text-xl"></i></button>
+            <div>
+                © 2026 <span class="font-eng text-cyan-400">OHMSHOP</span>. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- 5. Account Detail Modal -->
-    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-[#121218] border border-purple-500/40 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
-            <button type="button" onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-xl bg-black/65 hover:bg-red-500/80 text-white flex items-center justify-center transition-colors" aria-label="ปิดรายละเอียด">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div id="detail-modal-content"></div>
-        </div>
-    </div>
-
-    <!-- 6. Cart & Checkout Drawer -->
-    <div id="cart-drawer-overlay" onclick="toggleCart(false)" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm transition-opacity"></div>
-    <aside id="cart-drawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-[#111116] border-l border-purple-500/30 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
-        <!-- Drawer Header -->
-        <div class="p-4 sm:p-5 border-b border-gray-800 flex items-center justify-between bg-[#15151c] shrink-0">
-            <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-cart-shopping text-cyan-400 text-lg"></i>
-                <h2 class="font-bold text-lg text-white">ตะกร้าสินค้าของคุณ</h2>
-            </div>
-            <button type="button" onclick="toggleCart(false)" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center" aria-label="ปิดตะกร้า">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <!-- Step 1: Cart Items View -->
-        <div id="cart-view" class="flex-1 flex flex-col overflow-hidden">
-            <div id="cart-items-list" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3"></div>
-
-            <div id="cart-footer" class="p-4 sm:p-5 border-t border-gray-800 bg-[#15151c] space-y-4 shrink-0">
+    <!-- Purchase / Detail Modal -->
+    <div id="buy-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-start mb-4">
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1.5">โค้ดส่วนลด (ลองใช้: <span class="text-cyan-400 font-mono cursor-pointer underline" onclick="applyDemoCode('NEXUS50')">NEXUS50</span> หรือ <span class="text-purple-400 font-mono cursor-pointer underline" onclick="applyDemoCode('ROBLOX100')">ROBLOX100</span>)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="promo-input" placeholder="กรอกโค้ดส่วนลด..." class="flex-1 min-w-0 bg-[#0d0d12] border border-gray-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white uppercase focus:outline-none">
-                        <button type="button" onclick="applyPromoCode()" class="px-4 py-2.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-purple-200 text-sm font-medium shrink-0 transition-all">
-                            ใช้โค้ด
-                        </button>
-                    </div>
-                    <p id="promo-message" class="text-xs mt-1.5 hidden"></p>
+                    <span id="modal-tag" class="text-xs font-medium px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">หมวดหมู่</span>
+                    <h3 id="modal-title" class="text-xl font-bold text-white mt-1.5">ชื่อสินค้า</h3>
                 </div>
-
-                <div class="space-y-1.5 text-sm pt-2 border-t border-gray-800">
-                    <div class="flex justify-between text-gray-400">
-                        <span>ยอดรวมสินค้า</span>
-                        <span id="cart-subtotal">฿0</span>
-                    </div>
-                    <div class="flex justify-between text-emerald-400">
-                        <span>ส่วนลด</span>
-                        <span id="cart-discount">-฿0</span>
-                    </div>
-                    <div class="flex justify-between text-lg font-bold text-white pt-1">
-                        <span>ยอดชำระสุทธิ</span>
-                        <span id="cart-total" class="font-gaming text-cyan-400 text-xl">฿0</span>
-                    </div>
-                </div>
-
-                <button type="button" onclick="goToCheckout()" id="checkout-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-base shadow-neon-purple transition-all flex items-center justify-center gap-2">
-                    <span>ดำเนินการชำระเงิน</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Step 2: Payment & Slip View -->
-        <div id="checkout-view" class="hidden flex-1 flex-col overflow-y-auto p-4 sm:p-5 space-y-5">
-            <button type="button" onclick="backToCart()" class="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 py-1 w-fit">
-                <i class="fa-solid fa-arrow-left"></i> กลับไปแก้ไขตะกร้าสินค้า
-            </button>
-
-            <div class="bg-[#181822] border border-purple-500/30 rounded-2xl p-4 text-center">
-                <span class="text-xs text-gray-400">ยอดที่ต้องชำระทั้งหมด</span>
-                <div id="checkout-amount" class="text-3xl font-gaming font-bold text-cyan-400 mt-1">฿0</div>
+                <button onclick="closeModal('buy-modal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
             </div>
 
-            <!-- Payment Method Toggle -->
-            <div>
-                <label class="block text-xs text-gray-400 mb-2 font-medium">เลือกช่องทางการชำระเงินอัตโนมัติ</label>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button type="button" onclick="selectPaymentMethod('promptpay')" id="pay-tab-promptpay" class="p-3 rounded-xl border-2 border-cyan-400 bg-cyan-500/10 text-white flex flex-col items-center gap-1 transition-all">
-                        <i class="fa-solid fa-qrcode text-xl text-cyan-400"></i>
-                        <span class="text-xs font-semibold">TrueMoney / Thai QR</span>
-                    </button>
-                    <button type="button" onclick="selectPaymentMethod('truemoney')" id="pay-tab-truemoney" class="p-3 rounded-xl border border-gray-700 bg-[#181822] text-gray-400 flex flex-col items-center gap-1 transition-all">
-                        <i class="fa-solid fa-wallet text-xl text-orange-400"></i>
-                        <span class="text-xs font-semibold">ซองของขวัญ Wallet</span>
-                    </button>
-                </div>
+            <p id="modal-desc" class="text-slate-300 text-sm mb-4 leading-relaxed">รายละเอียดสินค้า</p>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 mb-5 flex items-center justify-between">
+                <span class="text-slate-400 text-sm">ราคาชำระสุทธิ</span>
+                <span id="modal-price" class="font-eng text-2xl font-bold text-cyan-400">฿0</span>
             </div>
 
-            <!-- TrueMoney / Thai QR Payment Box -->
-            <div id="method-promptpay" class="bg-gradient-to-b from-[#ff7a00] to-[#f95d00] rounded-2xl p-4 text-center space-y-3 shadow-lg">
-                <div class="flex items-center justify-center gap-1.5 text-white font-extrabold tracking-wide text-base">
-                    <i class="fa-solid fa-wallet"></i> truemoney <span class="text-[10px] font-medium bg-black/25 px-2 py-0.5 rounded-full">THAI QR PAYMENT</span>
-                </div>
-
-                <div class="bg-white rounded-xl p-3.5 shadow-md space-y-2.5">
-                    <div class="bg-[#113566] text-white py-1 px-2.5 rounded-md text-[11px] font-bold tracking-wider flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-qrcode"></i> THAI QR PAYMENT • พร้อมเพย์
-                    </div>
-
-                    <button type="button" onclick="openQrZoomModal()" class="relative group cursor-zoom-in mx-auto w-48 h-48 rounded-xl border-2 border-gray-200 overflow-hidden bg-white flex items-center justify-center p-2 focus:outline-none focus:ring-2 focus:ring-orange-500" aria-label="ขยายรูป QR Code">
-                        <canvas id="checkout-qr-canvas" class="qr-canvas"></canvas>
-                        <div class="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-semibold gap-1">
-                            <i class="fa-solid fa-magnifying-glass-plus text-lg text-cyan-300"></i>
-                            <span>คลิกเพื่อขยายรูป QR</span>
-                        </div>
-                    </button>
-
-                    <div class="pt-2 border-t border-gray-100">
-                        <div class="text-sm font-bold text-gray-900">ชื่อบัญชี: <span id="checkout-qr-name">นภาเดช ศิริพันธุ์</span></div>
-                        <div class="text-xs font-mono text-gray-600 mt-0.5">เลขที่บัญชี: <span id="checkout-qr-ref">140-**********-628</span></div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between gap-2 text-[11px] text-white/95 px-1">
-                    <span><i class="fa-solid fa-shield-halved mr-1"></i>รองรับทุกธนาคาร & TrueMoney</span>
-                    <button type="button" onclick="openQrZoomModal()" class="underline font-semibold hover:text-cyan-200 py-1">
-                        ขยายรูปใหญ่
-                    </button>
-                </div>
-            </div>
-
-            <!-- TrueMoney Gift Envelope Box -->
-            <div id="method-truemoney" class="hidden bg-[#181822] border border-orange-500/40 rounded-2xl p-5 space-y-3">
-                <div class="flex items-center gap-2 text-orange-400 font-bold text-sm">
-                    <i class="fa-solid fa-gift"></i> ชำระผ่านซองของขวัญ TrueMoney Wallet
-                </div>
-                <p class="text-xs text-gray-400 leading-relaxed">สร้างซองของขวัญตามยอดชำระและวางลิงก์ด้านล่าง หรือสแกนจ่ายผ่านแท็บ <b class="text-white">TrueMoney / Thai QR</b> เพื่อโอนเข้าบัญชี <b class="text-orange-300">นภาเดช ศิริพันธุ์</b></p>
-                <input type="text" id="truemoney-link-input" placeholder="วางลิงก์ซองของขวัญ https://gift.truemoney.com/campaign/?v=..." class="w-full bg-[#0d0d12] border border-gray-700 focus:border-orange-400 rounded-xl px-3 py-2.5 text-xs text-gray-200 font-mono focus:outline-none">
-            </div>
-
-            <!-- Slip Upload Section -->
-            <div class="bg-[#181822] border border-gray-800 rounded-2xl p-4 space-y-3">
-                <div class="flex items-center justify-between gap-2">
-                    <span class="text-xs font-bold text-gray-200 flex items-center gap-1.5">
-                        <i class="fa-solid fa-receipt text-cyan-400"></i> แนบหลักฐานสลิปการโอนเงิน
-                    </span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">รองรับ JPG, PNG</span>
-                </div>
-
-                <div id="slip-dropzone" role="button" tabindex="0" class="flex flex-col items-center justify-center border-2 border-dashed border-gray-700 hover:border-cyan-400/70 rounded-xl p-4 cursor-pointer bg-[#101016] transition-all text-center min-h-[120px]">
-                    <div id="slip-placeholder" class="space-y-1.5 pointer-events-none">
-                        <i class="fa-solid fa-cloud-arrow-up text-2xl text-purple-400"></i>
-                        <p class="text-xs text-gray-200 font-semibold">คลิกเพื่อเลือกรูปภาพสลิปโอนเงิน</p>
-                        <p class="text-[11px] text-gray-400">เพื่อความรวดเร็วในการตรวจสอบยอดเงิน</p>
-                    </div>
-                    <div id="slip-preview-box" class="hidden w-full space-y-2 pointer-events-none">
-                        <img id="slip-preview-img" src="" alt="ตัวอย่างสลิป" class="max-h-36 mx-auto rounded-lg border border-emerald-500/40 object-contain">
-                        <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-emerald-400 font-medium">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <span id="slip-file-name" class="truncate max-w-[180px]">slip.png</span>
-                            <span class="text-gray-400 underline">(คลิกเพื่อเปลี่ยนรูป)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between gap-2 text-[11px] text-gray-400">
-                    <button type="button" onclick="triggerFilePicker('slip-upload-input')" class="text-cyan-400 hover:text-cyan-300 underline font-medium py-1">
-                        เปิดโฟลเดอร์เลือกรูปสลิป
-                    </button>
-                    <button type="button" onclick="attachSampleSlipFallback()" class="text-purple-300 hover:text-purple-200 py-1">
-                        ใช้สลิปทดสอบด่วน
-                    </button>
-                </div>
-            </div>
-
-            <button type="button" onclick="confirmPayment()" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-gray-950 font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-circle-check text-lg"></i>
-                <span>ยืนยันการโอนเงิน & รับรหัสทันที</span>
-            </button>
-        </div>
-
-        <!-- Step 3: Instant Delivery Success View -->
-        <div id="delivery-view" class="hidden flex-1 flex-col overflow-y-auto p-4 sm:p-5 space-y-5">
-            <div class="text-center space-y-2 pt-2">
-                <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-400 flex items-center justify-center mx-auto text-3xl animate-bounce">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white">ชำระเงินสำเร็จ! จัดส่งรหัสแล้ว</h3>
-                <p class="text-xs text-gray-400">กรุณาคัดลอก Username : Password ด้านล่างและเปลี่ยนรหัสผ่านทันที</p>
-            </div>
-
-            <div id="delivered-accounts-list" class="space-y-3"></div>
-
-            <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 text-xs text-amber-200 space-y-1">
-                <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> คำแนะนำความปลอดภัย:</div>
-                <p>ระบบได้บันทึกรหัสทั้งหมดไว้ในเมนู <b>"ประวัติการสั่งซื้อ"</b> เรียบร้อยแล้ว คุณสามารถกลับมาดูย้อนหลังได้ตลอดเวลา</p>
-            </div>
-
-            <button type="button" onclick="finishOrderFlow()" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all">
-                เสร็จสิ้น & กลับสู่หน้าร้าน
-            </button>
-        </div>
-    </aside>
-
-    <!-- 7. Order History Modal -->
-    <div id="history-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-[#121218] border border-purple-500/40 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
-            <div class="p-5 border-b border-gray-800 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-clock-rotate-left text-purple-400 text-xl"></i>
-                    <div>
-                        <h3 class="font-bold text-lg text-white">ประวัติการสั่งซื้อรหัส Roblox</h3>
-                        <p class="text-xs text-gray-400">ข้อมูล Username และ Password ที่คุณเคยสั่งซื้อทั้งหมด</p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeHistoryModal()" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-white flex items-center justify-center" aria-label="ปิดประวัติการสั่งซื้อ">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div id="history-list-container" class="p-5 overflow-y-auto flex-1 space-y-4"></div>
-        </div>
-    </div>
-
-    <!-- 8. Admin PIN Login Modal -->
-    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="bg-[#121218] border border-cyan-500/40 rounded-2xl max-w-sm w-full p-6 shadow-neon-blue relative">
-            <button type="button" onclick="closeAdminLoginModal()" class="absolute top-4 right-4 w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center" aria-label="ปิดหน้าต่างล็อกอิน">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="text-center space-y-3 mb-5">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-600/20 border border-cyan-400/40 text-cyan-400 flex items-center justify-center mx-auto text-2xl">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white">เข้าสู่ระบบหลังบ้าน (Admin)</h3>
-                <p class="text-xs text-gray-400">กรุณากรอกรหัส PIN ผู้ดูแลร้านเพื่อจัดการสต็อกสินค้า<br><span class="text-cyan-400 font-mono">(รหัส PIN ทดสอบ: 1234)</span></p>
-            </div>
-            <form onsubmit="verifyAdminPin(event)" class="space-y-4">
-                <div>
-                    <input type="password" id="admin-pin-input" maxlength="8" placeholder="••••" autocomplete="off"
-                        class="w-full bg-[#0a0a0e] border border-gray-700 focus:border-cyan-400 rounded-xl py-3 px-4 text-center font-gaming text-2xl tracking-[0.5em] text-white focus:outline-none">
-                    <p id="admin-pin-error" class="text-xs text-red-400 text-center mt-2 hidden">รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</p>
-                </div>
-                <label class="flex items-center justify-center gap-2 text-xs text-gray-400 cursor-pointer select-none py-1">
-                    <input type="checkbox" id="admin-remember-session" checked class="rounded bg-gray-800 border-gray-600 text-cyan-500 focus:ring-0">
-                    <span>จดจำการเข้าสู่ระบบในเซสชันนี้</span>
-                </label>
-                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-sm shadow-neon-purple transition-all">
-                    ยืนยันรหัส PIN
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 9. Admin Dashboard Modal -->
-    <div id="admin-dashboard-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-md">
-        <div class="bg-[#101015] border border-cyan-500/30 rounded-2xl max-w-6xl w-full h-[92vh] flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-gray-800 bg-[#15151d] flex flex-wrap items-center justify-between gap-3 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40 text-cyan-400 flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-sliders"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-base sm:text-lg text-white flex items-center gap-2">
-                            BLOX-NEXUS Admin Panel
-                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase">Live Sync</span>
-                        </h2>
-                        <p class="text-xs text-gray-400 hidden sm:block">จัดการสต็อกรหัส Roblox เพิ่ม/แก้ไข/ลบสินค้า และตั้งค่า QR รับเงิน</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="resetDefaultAccounts()" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-medium transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-rotate-left"></i>
-                        <span class="hidden sm:inline">รีเซ็ตข้อมูลเริ่มต้น</span>
-                    </button>
-                    <button type="button" onclick="logoutAdmin()" class="px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 text-xs font-medium transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span class="hidden sm:inline">ออกจากระบบ</span>
-                    </button>
-                    <button type="button" onclick="closeAdminDashboard()" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-white flex items-center justify-center" aria-label="ปิดหน้าหลังบ้าน">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <div class="bg-[#16161f] border border-gray-800 rounded-2xl p-4">
-                        <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                            <span>สต็อกพร้อมขาย</span>
-                            <i class="fa-solid fa-box text-cyan-400"></i>
-                        </div>
-                        <div id="stat-available" class="text-2xl sm:text-3xl font-gaming font-bold text-cyan-400">0</div>
-                        <span class="text-[11px] text-gray-500">ไอดีที่แสดงหน้าเว็บ</span>
-                    </div>
-                    <div class="bg-[#16161f] border border-gray-800 rounded-2xl p-4">
-                        <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                            <span>ขายออกแล้ว</span>
-                            <i class="fa-solid fa-bag-shopping text-purple-400"></i>
-                        </div>
-                        <div id="stat-sold" class="text-2xl sm:text-3xl font-gaming font-bold text-purple-400">0</div>
-                        <span class="text-[11px] text-gray-500">ไอดีที่ถูกสั่งซื้อ</span>
-                    </div>
-                    <div class="bg-[#16161f] border border-gray-800 rounded-2xl p-4">
-                        <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                            <span>รายได้รวมทั้งหมด</span>
-                            <i class="fa-solid fa-baht-sign text-emerald-400"></i>
-                        </div>
-                        <div id="stat-revenue" class="text-2xl sm:text-3xl font-gaming font-bold text-emerald-400">฿0</div>
-                        <span class="text-[11px] text-gray-500">จากประวัติคำสั่งซื้อ</span>
-                    </div>
-                    <div class="bg-[#16161f] border border-gray-800 rounded-2xl p-4">
-                        <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                            <span>แจ้งเตือนสต็อกหมด</span>
-                            <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
-                        </div>
-                        <div id="stat-outofstock" class="text-2xl sm:text-3xl font-gaming font-bold text-rose-400">0</div>
-                        <span class="text-[11px] text-gray-500">รายการที่สถานะ Sold Out</span>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#16161f] p-4 rounded-2xl border border-gray-800">
-                    <div class="flex flex-wrap items-center gap-2.5 flex-1">
-                        <div class="relative flex-1 min-w-[180px] max-w-xs">
-                            <input type="text" id="admin-search-input" oninput="renderAdminTable()" placeholder="ค้นหารหัส / ชื่อสินค้า / ID..."
-                                class="w-full bg-[#0d0d12] border border-gray-700 focus:border-cyan-400 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:outline-none">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-500 text-xs"></i>
-                        </div>
-                        <button type="button" onclick="toggleAdminRevealAll()" id="admin-reveal-btn" class="px-3 py-2.5 rounded-xl bg-[#0d0d12] hover:bg-gray-800 border border-gray-700 text-gray-300 text-xs font-medium flex items-center gap-1.5 shrink-0">
-                            <i class="fa-regular fa-eye text-cyan-400"></i>
-                            <span>แสดงรหัสผ่านทั้งหมด</span>
-                        </button>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button type="button" onclick="openAdminQrModal()" class="px-3.5 py-2.5 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 border border-orange-500/40 text-orange-300 text-xs font-semibold flex items-center gap-1.5 transition-all">
-                            <i class="fa-solid fa-qrcode"></i> ตั้งค่า QR รับเงิน
-                        </button>
-                        <button type="button" onclick="openAccountFormModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white text-xs sm:text-sm font-bold shadow-neon-purple flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> เพิ่มรหัส Roblox ใหม่
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-[#16161f] border border-gray-800 rounded-2xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-[#1c1c26] border-b border-gray-800 text-[11px] uppercase tracking-wider text-gray-400">
-                                    <th class="py-3.5 px-4">สินค้า / รหัสอ้างอิง</th>
-                                    <th class="py-3.5 px-4">หมวดหมู่เกม</th>
-                                    <th class="py-3.5 px-4">ราคา</th>
-                                    <th class="py-3.5 px-4">สถานะ</th>
-                                    <th class="py-3.5 px-4">ข้อมูลไอดี (User : Pass)</th>
-                                    <th class="py-3.5 px-4 text-right">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-table-body" class="divide-y divide-gray-800/80 text-xs"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 10. Add / Edit Account Form Modal -->
-    <div id="account-form-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-        <div class="bg-[#121218] border border-purple-500/40 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="p-5 border-b border-gray-800 flex items-center justify-between bg-[#16161f] rounded-t-2xl shrink-0">
-                <h3 id="account-form-title" class="font-bold text-lg text-white flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-cyan-400"></i> เพิ่มรหัส Roblox ใหม่
-                </h3>
-                <button type="button" onclick="closeAccountFormModal()" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center" aria-label="ปิดฟอร์มสินค้า">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <form id="account-form" onsubmit="saveAccountForm(event)" class="p-5 overflow-y-auto space-y-4 text-sm">
-                <input type="hidden" id="form-acc-id">
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">รหัสสินค้า (Code) *</label>
-                        <input type="text" id="form-acc-code" required placeholder="เช่น BF-999" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-white font-gaming uppercase focus:outline-none">
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs text-gray-400 mb-1">หมวดหมู่เกม *</label>
-                        <select id="form-acc-game" required class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-white focus:outline-none">
-                            <option value="Blox Fruits">Blox Fruits</option>
-                            <option value="King Legacy">King Legacy</option>
-                            <option value="Pet Simulator 99">Pet Simulator 99</option>
-                            <option value="Anime Defenders">Anime Defenders</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs text-gray-400 mb-1">ชื่อรายการสินค้า *</label>
-                    <input type="text" id="form-acc-title" required placeholder="เช่น Blox Fruits โมจิตื่น + เผ่า V4 Full Gear" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-white focus:outline-none">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">ราคาขาย (บาท) *</label>
-                        <input type="number" id="form-acc-price" required min="1" placeholder="299" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-cyan-400 font-gaming font-bold focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">ราคาเต็ม (ขีดฆ่า)</label>
-                        <input type="number" id="form-acc-original-price" min="1" placeholder="490" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-gray-300 font-gaming focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">สถานะสต็อก</label>
-                        <select id="form-acc-sold" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-white focus:outline-none">
-                            <option value="false">พร้อมขาย (Available)</option>
-                            <option value="true">ขายแล้ว (Sold Out)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Image Upload + URL + Preset Selector -->
-                <div class="bg-[#181822] p-3.5 rounded-xl border border-gray-800 space-y-3">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <span class="text-xs font-semibold text-gray-200">รูปภาพปกสินค้า</span>
-                        <div class="flex flex-wrap gap-1.5 text-[11px]">
-                            <button type="button" onclick="setPresetImage('bf')" class="px-2 py-1 rounded bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">ธีม Blox Fruits</button>
-                            <button type="button" onclick="setPresetImage('ad')" class="px-2 py-1 rounded bg-purple-500/20 text-purple-300 hover:bg-purple-500/30">ธีม Anime</button>
-                            <button type="button" onclick="setPresetImage('ps')" class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30">ธีม Pet Sim</button>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                        <div id="form-acc-image-dropzone" role="button" tabindex="0" class="w-24 h-20 rounded-xl border-2 border-dashed border-gray-600 hover:border-cyan-400 bg-[#0b0b0f] flex flex-col items-center justify-center cursor-pointer overflow-hidden shrink-0 relative">
-                            <img id="form-acc-image-preview" src="https://placehold.co/600x360/1e1b4b/38bdf8?text=ROBLOX+ID" alt="ตัวอย่างรูปสินค้า" class="w-full h-full object-cover">
-                            <span class="absolute bottom-0 inset-x-0 bg-black/75 text-[10px] text-cyan-300 text-center py-0.5">อัปโหลดรูป</span>
-                        </div>
-
-                        <div class="flex-1 w-full space-y-2">
-                            <div class="flex flex-wrap gap-2">
-                                <button type="button" onclick="triggerFilePicker('form-acc-image-file')" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-1.5">
-                                    <i class="fa-solid fa-image"></i> เลือกรูปจากเครื่อง
-                                </button>
-                                <span id="form-acc-file-label" class="text-xs text-gray-400 self-center truncate max-w-[200px]"></span>
-                            </div>
-                            <input type="text" id="form-acc-image" required oninput="syncAccountImagePreview(this.value)" placeholder="https://placehold.co/600x360/... หรืออัปโหลดไฟล์รูป" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">ป้ายกำกับ Badges (คั่นด้วยลูกน้ำ ,)</label>
-                        <input type="text" id="form-acc-badges" placeholder="แนะนำ, ผลถาวร, เผ่า V4" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">จุดเด่น 3 ข้อบนการ์ด (คั่นด้วยลูกน้ำ ,)</label>
-                        <input type="text" id="form-acc-highlights" placeholder="เลเวล 2550 (ตัน), หมัด Godhuman, เงิน 20M+" class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                    </div>
-                </div>
-
-                <!-- Detailed Specs -->
-                <div class="bg-[#181822] p-3.5 rounded-xl border border-gray-800 space-y-3">
-                    <div class="text-xs font-bold text-purple-300"><i class="fa-solid fa-list-check mr-1"></i> รายละเอียดเชิงลึกในหน้า Modal</div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="block text-gray-400 mb-1">เลเวล / แรงก์</label>
-                            <input type="text" id="form-detail-level" placeholder="2,550 (MAX)" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-gray-400 mb-1">เงิน / ทรัพยากรในเกม</label>
-                            <input type="text" id="form-detail-currency" placeholder="30,000,000 Beli / 25,000 Fragments" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-gray-400 mb-1">ผลปีศาจ / ยูนิต / สัตว์เลี้ยงที่มี</label>
-                            <input type="text" id="form-detail-fruits" placeholder="ผลโมจิตื่น (ถาวร), ผลพระ (ถาวร)" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-gray-400 mb-1">อาวุธ / ไอเทมแรร์</label>
-                            <input type="text" id="form-detail-weapons" placeholder="ดาบคู่โอเด้ง CDK, Soul Guitar" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-gray-400 mb-1">สถานะการผูกเมล/เบอร์</label>
-                            <input type="text" id="form-detail-security" value="ไม่ผูกอีเมล / ไม่ผูกเบอร์โทร (เปลี่ยนรหัสได้ 100%)" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-emerald-300">
-                        </div>
-                        <div>
-                            <label class="block text-gray-400 mb-1">ของแถมเพิ่มเติม</label>
-                            <input type="text" id="form-detail-bonus" placeholder="รีสเตตัสฟรี + พร้อมลุยทันที" class="w-full bg-[#0b0b0f] border border-gray-700 rounded-lg px-2.5 py-1.5 text-white">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Real Account Credentials -->
-                <div class="bg-emerald-500/10 p-3.5 rounded-xl border border-emerald-500/30 space-y-2.5">
-                    <div class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                        <i class="fa-solid fa-key"></i> ข้อมูลไอดีสำหรับจัดส่งอัตโนมัติหลังลูกค้าชำระเงิน *
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-                        <div>
-                            <label class="block text-gray-300 font-sans mb-1">Roblox Username *</label>
-                            <input type="text" id="form-cred-user" required placeholder="Username123" class="w-full bg-[#0b0b0f] border border-emerald-500/40 rounded-lg px-3 py-2 text-white focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-gray-300 font-sans mb-1">Roblox Password *</label>
-                            <input type="text" id="form-cred-pass" required placeholder="Pass#9999" class="w-full bg-[#0b0b0f] border border-emerald-500/40 rounded-lg px-3 py-2 text-emerald-400 focus:outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-2.5 pt-3 border-t border-gray-800">
-                    <button type="button" onclick="closeAccountFormModal()" class="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold">
-                        ยกเลิก
-                    </button>
-                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white text-xs font-bold shadow-neon-purple">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกข้อมูลสินค้า
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 11. Delete Confirmation Modal -->
-    <div id="delete-confirm-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-        <div class="bg-[#121218] border border-red-500/40 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
-            <div class="w-14 h-14 rounded-2xl bg-red-500/15 border border-red-500/40 text-red-400 flex items-center justify-center mx-auto text-2xl">
-                <i class="fa-solid fa-trash-can"></i>
-            </div>
-            <div>
-                <h4 class="text-lg font-bold text-white">ยืนยันการลบรหัสสินค้า?</h4>
-                <p id="delete-confirm-text" class="text-xs text-gray-400 mt-1">คุณต้องการลบรายการนี้ออกจากระบบใช่หรือไม่</p>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button type="button" onclick="closeDeleteConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold">
+            <div class="flex gap-3">
+                <button onclick="closeModal('buy-modal')" class="flex-1 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm font-medium transition">
                     ยกเลิก
                 </button>
-                <button type="button" id="confirm-delete-btn" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold">
-                    ยืนยันการลบ
+                <button onclick="confirmOrder()" class="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition shadow-lg shadow-cyan-500/25">
+                    ยืนยันการสั่งซื้อ
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 12. QR Code Zoom Modal -->
-    <div id="qr-zoom-modal" onclick="closeQrZoomModal()" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-        <div onclick="event.stopPropagation()" class="bg-gradient-to-b from-[#ff7a00] to-[#ea580c] rounded-3xl max-w-sm w-full p-5 text-center space-y-4 shadow-2xl relative border border-orange-300/40">
-            <button type="button" onclick="closeQrZoomModal()" class="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-colors" aria-label="ปิดรูป QR ขยาย">
-                <i class="fa-solid fa-xmark"></i>
+    <!-- Topup Modal -->
+    <div id="topup-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white">เติมเครดิตเข้าสู่ระบบ OHMSHOP</h3>
+                <button onclick="closeModal('topup-modal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
+            </div>
+            <p class="text-slate-400 text-sm mb-4">รองรับซองอั่งเปา TrueMoney Wallet และโอนผ่านธนาคาร (พร้อมเชื่อมต่อระบบหลังบ้าน)</p>
+            <input type="text" placeholder="วางลิงก์ซองอั่งเปาที่นี่..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 mb-4">
+            <button onclick="alert('ระบบเติมเงินพร้อมเชื่อมต่อ API ในขั้นตอนถัดไปครับ!'); closeModal('topup-modal');" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+                ตรวจสอบซองอั่งเปา
             </button>
-
-            <div class="text-white font-extrabold text-xl tracking-wide pt-1">
-                <i class="fa-solid fa-wallet mr-1"></i> truemoney
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 shadow-xl space-y-3">
-                <div class="bg-[#113566] text-white py-1.5 px-3 rounded-lg text-xs font-bold tracking-wider">
-                    THAI QR PAYMENT • พร้อมเพย์
-                </div>
-                <div class="w-64 h-64 max-w-full mx-auto bg-white rounded-xl border border-gray-200 overflow-hidden flex items-center justify-center p-2">
-                    <canvas id="zoom-qr-canvas" class="qr-canvas"></canvas>
-                </div>
-                <div class="pt-2 border-t border-gray-100">
-                    <div id="zoom-qr-name" class="text-base font-bold text-gray-900">นภาเดช ศิริพันธุ์</div>
-                    <div id="zoom-qr-ref" class="text-xs font-mono text-gray-600 mt-0.5">140-**********-628</div>
-                </div>
-            </div>
-
-            <p class="text-xs text-white/95 font-medium">
-                แคปหน้าจอนี้เพื่อสแกนจ่ายผ่านแอปธนาคารหรือ TrueMoney ได้ทันที
-            </p>
-        </div>
-    </div>
-
-    <!-- 13. Admin QR Settings Modal -->
-    <div id="admin-qr-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-        <div class="bg-[#121218] border border-orange-500/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-gray-800">
-                <h3 class="font-bold text-base text-white flex items-center gap-2">
-                    <i class="fa-solid fa-qrcode text-orange-400"></i> ตั้งค่า QR Code รับชำระเงิน
-                </h3>
-                <button type="button" onclick="closeAdminQrModal()" class="w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center" aria-label="ปิดตั้งค่า QR">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <form onsubmit="saveAdminQrSettings(event)" class="space-y-4 text-xs">
-                <div class="bg-[#181822] p-3 rounded-xl border border-gray-800 text-center space-y-2">
-                    <span class="text-gray-400 block">ตัวอย่าง QR Code ปัจจุบันหน้าร้าน</span>
-                    <div class="w-40 h-40 mx-auto bg-white rounded-xl p-2 overflow-hidden flex items-center justify-center">
-                        <canvas id="admin-qr-canvas" class="qr-canvas"></canvas>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-gray-300 font-medium">อัปโหลดรูปภาพ QR Code ใหม่ (จากเครื่อง)</label>
-                        <button type="button" onclick="triggerFilePicker('admin-qr-file')" class="px-3 py-1.5 rounded-lg bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 text-orange-200 font-semibold">
-                            เลือกรูปภาพ QR
-                        </button>
-                    </div>
-                    <p id="admin-qr-file-name" class="text-[11px] text-gray-400 truncate">ใช้ QR Code มาตรฐานบัญชี นภาเดช ศิริพันธุ์ (140-**********-628)</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-gray-400 mb-1">ชื่อบัญชีรับเงิน</label>
-                        <input type="text" id="admin-qr-name-input" required value="นภาเดช ศิริพันธุ์"
-                            class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-orange-400 rounded-xl px-3 py-2 text-white focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 mb-1">เลขบัญชี / PromptPay ID</label>
-                        <input type="text" id="admin-qr-ref-input" required value="140-**********-628"
-                            class="w-full bg-[#0b0b0f] border border-gray-700 focus:border-orange-400 rounded-xl px-3 py-2 text-white font-mono focus:outline-none">
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-gray-800">
-                    <button type="button" onclick="resetDefaultQrSettings()" class="text-gray-400 hover:text-orange-300 underline py-1">
-                        คืนค่า QR เดิม (นภาเดช)
-                    </button>
-                    <div class="flex gap-2">
-                        <button type="button" onclick="closeAdminQrModal()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold">
-                            ยกเลิก
-                        </button>
-                        <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-gray-950 font-bold">
-                            บันทึก QR Code
-                        </button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
     <script>
-        const defaultAccountsData = [
+        const products = [
             {
                 id: 1,
-                code: "BF-901",
-                game: "Blox Fruits",
-                title: "Blox Fruits โมจิตื่น + เสือดาว + เผ่าไซบอร์ก V4",
-                price: 590,
-                originalPrice: 890,
-                image: "https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+FRUITS+MOCHI+V4",
-                badges: ["ผลถาวร", "เลเวลตัน", "เผ่า V4"],
-                highlights: ["เลเวล 2550 (ตัน)", "ผลโมจิตื่นครบสกิล", "ดาบคู่โอเด้ง (CDK)"],
-                details: {
-                    level: "2,550 (MAX)",
-                    fruits: "โมจิตื่น (ถาวร), เสือดาว (ถาวร), พระ (ถาวร)",
-                    weapons: "Cursed Dual Katana (CDK), Soul Guitar, True Triple Katana",
-                    currency: "45,800,000 Beli / 32,000 Fragments",
-                    security: "ไม่ผูกอีเมล / ไม่ผูกเบอร์โทร (เปลี่ยนรหัสได้ทันที 100%)",
-                    bonus: "หมัด Godhuman ครบทุกสกิล + เกมพาสรวม 3 ชิ้น"
-                },
-                credentials: { user: "NexusGod_Mochi99", pass: "Blox#88421TH" },
-                sold: false
+                category: 'bloxfruits',
+                tag: 'ขายดีอันดับ 1',
+                title: 'ไก่ตัน LV.MAX + หมัด Godhuman',
+                desc: 'เลเวลตัน 2550 หมัด Godhuman ครบทุกสกิล เงินเบลี 10M+ มีโอกาสได้ดาบคู่โอเด้งและผลตื่นในตัว ไอดีสะอาดเปลี่ยนรหัสได้ทันที',
+                price: 59,
+                stock: 14,
+                badgeColor: 'from-cyan-500 to-blue-600'
             },
             {
                 id: 2,
-                code: "BF-104",
-                game: "Blox Fruits",
-                title: "ไก่ตัน Blox Fruits เลเวล 2550 + หมัด Godhuman + สุ่มผลแรร์",
-                price: 79,
-                originalPrice: 150,
-                image: "https://placehold.co/600x360/0f172a/22d3ee?text=BLOX+FRUITS+KAI+TAN",
-                badges: ["ไอดีไก่ตัน", "เลเวลตัน", "ขายดี"],
-                highlights: ["เลเวล 2550 (ตัน)", "หมัด Godhuman", "เงินเบลี 15M+"],
-                details: {
-                    level: "2,550 (MAX)",
-                    fruits: "ผลพระตื่นในตัว + ผลในกระเป๋าอีก 3-5 ผล",
-                    weapons: "ดาบ Rengoku, Sabre V2, มีโอกาสได้เคียวแดง",
-                    currency: "15,500,000 Beli / 18,000 Fragments",
-                    security: "ไอดีสะอาด ไม่ผูกเมลและเบอร์ (13+)",
-                    bonus: "สเตตัสรีเซ็ตฟรี 1 ครั้ง พร้อมลุยโลก 3 ทันที"
-                },
-                credentials: { user: "KaiTanPro_2026x", pass: "FarmMax@5519" },
-                sold: false
+                category: 'bloxfruits',
+                tag: 'การันตีผลเทพ',
+                title: 'ไก่ตัน การันตีผล Kitsune / Leopard',
+                desc: 'เลเวลตันพร้อมลุย PvP การันตีมีผล Kitsune หรือ Leopard ในกระเป๋าหรือกินแล้วอย่างน้อย 1 ผล พร้อมเงินม่วง 15,000+',
+                price: 129,
+                stock: 6,
+                badgeColor: 'from-purple-500 to-pink-600'
             },
             {
                 id: 3,
-                code: "AD-302",
-                game: "Anime Defenders",
-                title: "Anime Defenders โกโจ (Evo) + ซุนจินอู ร่างเงา S-Rank",
-                price: 450,
-                originalPrice: 650,
-                image: "https://placehold.co/600x360/2e1065/c084fc?text=ANIME+DEFENDERS+MYTHIC",
-                badges: ["ตัวลับ Secret", "Evo แล้ว"],
-                highlights: ["Gojo Evo สกิลครบ", "เพชร 25,000+ Gems", "Trait ระดับเทพ"],
-                details: {
-                    level: "Level 65",
-                    fruits: "ยูนิต: Gojo (Evo), Shadow Monarch, Elf Wizardess",
-                    weapons: "Trait: Almighty / Requiem ติดตัวหลัก",
-                    currency: "25,400 Gems / 120 Trait Crystals",
-                    security: "ไม่ผูกอีเมล / ไม่ผูกเบอร์โทร ปลอดภัย 100%",
-                    bonus: "ผ่านด่าน Story ครบทุกแมพ พร้อมลง Infinite"
-                },
-                credentials: { user: "GojoLimitless_AD", pass: "Domain#99201" },
-                sold: false
+                category: 'bloxfruits',
+                tag: 'สายฟาร์มคุ้มสุด',
+                title: 'ไก่ตัน ผลพระตื่น + ดาบคู่ CDK',
+                desc: 'เลเวลตัน ผลพระตื่นครบสกิลฟาร์มไวสุดๆ พร้อมดาบคู่ Cursed Dual Katana และ Soul Guitar ครบเซ็ต',
+                price: 99,
+                stock: 9,
+                badgeColor: 'from-amber-500 to-orange-600'
             },
             {
                 id: 4,
-                code: "PS-505",
-                game: "Pet Simulator 99",
-                title: "Pet Sim 99 สัตว์เลี้ยง Huge 5 ตัว + เพชร 50M Gems",
-                price: 320,
-                originalPrice: 490,
-                image: "https://placehold.co/600x360/172554/60a5fa?text=PET+SIM+99+HUGE+PACK",
-                badges: ["Huge Pets", "รวยเพชร"],
-                highlights: ["Huge Hell Rock x3", "Huge Happy Computer x2", "เพชร 50 ล้าน"],
-                details: {
-                    level: "Rank 18 / ปลดล็อกครบทุกโซน",
-                    fruits: "สัตว์เลี้ยง: Huge Hell Rock (3), Huge Computer (2), Exclusive 10+",
-                    weapons: "หนังสือ Enchant ระดับ VII ครบเซ็ตฟาร์ม",
-                    currency: "50,000,000 Gems",
-                    security: "ไอดีสะอาด ไม่ติด Pin ไม่ผูกเมล",
-                    bonus: "เปิดช่องใส่สัตว์เลี้ยงเพิ่มแล้ว + Hoverboard ลายพิเศษ"
-                },
-                credentials: { user: "HugeCollector_99", pass: "GemsRich$7741" },
-                sold: false
+                category: 'random',
+                tag: 'กล่องสุ่มสุดคุ้ม',
+                title: 'สุ่มรหัสไก่ตัน เริ่มต้นเพียง 19 บาท',
+                desc: 'ลุ้นรับรหัสเลเวล 1500 - 2550 การันตีไม่เกลือ มีโอกาสออกรหัสผลถาวรและดาบคู่ CDK สูงมาก!',
+                price: 19,
+                stock: 32,
+                badgeColor: 'from-emerald-500 to-teal-600'
             },
             {
                 id: 5,
-                code: "KL-210",
-                game: "King Legacy",
-                title: "King Legacy เลเวลตัน 4800 + ผลมังกร + ดาบคู่โจรสลัด",
-                price: 189,
-                originalPrice: 290,
-                image: "https://placehold.co/600x360/1e1b4b/a855f7?text=KING+LEGACY+DRAGON",
-                badges: ["เลเวลตัน", "ผลมังกร"],
-                highlights: ["เลเวล 4,800 (ตัน)", "ผลมังกรในตัว", "เพชร 150+ Gems"],
-                details: {
-                    level: "4,800 (MAX)",
-                    fruits: "ผลมังกร (Dragon) พร้อมใช้ + ผลฟีนิกซ์ในคลัง",
-                    weapons: "Authentic Triple Katana, Muramasa, Phoenix Blade",
-                    currency: "85,000,000 Beli / 165 Gems",
-                    security: "ไม่ผูกเมล / ไม่ผูกเบอร์โทร",
-                    bonus: "ฮาคิเกราะ & ฮาคิสังเกตระดับสูงสุด"
-                },
-                credentials: { user: "KingDragon_KL88", pass: "Legacy@33012" },
-                sold: false
+                category: 'bloxfruits',
+                tag: 'เผ่า V4 ตื่นเต็ม',
+                title: 'ไอดีเผ่า V4 Full Gear + หมัดครบ',
+                desc: 'เลเวลตัน เผ่า V4 อัปเกียร์เต็มขั้น พร้อมลงสนาม PvP ทันที ไอดีไม่ติดเมล ไม่ติดเบอร์ ปลอดภัย 100%',
+                price: 249,
+                stock: 3,
+                badgeColor: 'from-rose-500 to-red-600'
             },
             {
                 id: 6,
-                code: "BF-888",
-                game: "Blox Fruits",
-                title: "ไอดีสุลต่าน Blox Fruits ผลถาวร 8 ผล + เผ่า V4 ครบ 4 เผ่า",
-                price: 1290,
-                originalPrice: 1890,
-                image: "https://placehold.co/600x360/311042/38bdf8?text=SULTAN+ID+8+PERM+FRUITS",
-                badges: ["ผลถาวร 8 ผล", "เผ่า V4 ครบ", "ไอดีสุลต่าน"],
-                highlights: ["ผลถาวร 8 ชนิด", "เผ่า V4 Full Gear 4 เผ่า", "ค่าหัว 10M+"],
-                details: {
-                    level: "2,550 (MAX) | Bounty 10.5M",
-                    fruits: "ผลถาวร: Kitsune, Leopard, Dough, Dragon, Buddha, Portal, Magma, Ice",
-                    weapons: "ครบทุกดาบและปืนในเกม ตีบวกดาวครบ",
-                    currency: "99,000,000 Beli / 65,000 Fragments",
-                    security: "ไม่ผูกเมล / ไม่ผูกเบอร์ (เปลี่ยนข้อมูลได้ทั้งหมด)",
-                    bonus: "Gamepass ครบทุกอันในเกม (Dark Blade, Fruit Notifier, 2x Mastery ฯลฯ)"
-                },
-                credentials: { user: "SultanBlox_VIP1", pass: "Kitsune#99999" },
-                sold: false
-            },
-            {
-                id: 7,
-                code: "AD-115",
-                game: "Anime Defenders",
-                title: "ไอดีฟาร์มเพชร Anime Defenders 40,000 Gems พร้อมสุ่มตู้ใหม่",
-                price: 99,
-                originalPrice: 180,
-                image: "https://placehold.co/600x360/0f172a/818cf8?text=40,000+GEMS+STARTER",
-                badges: ["ไอดีไก่ตัน", "สายสุ่ม"],
-                highlights: ["เพชร 40,000+ Gems", "ตั๋วสุ่มพิเศษ 20 ใบ", "พร้อมสุ่ม Mythic"],
-                details: {
-                    level: "Level 30",
-                    fruits: "ยูนิต Legendary ครบทีมสำหรับฟาร์มเบื้องต้น",
-                    weapons: "ไอเทมอัปเกรดและอาหารสัตว์เลี้ยงจำนวนมาก",
-                    currency: "41,200 Gems / 25,000 Gold",
-                    security: "ไอดีสะอาด 100% ไม่ผูกเมล",
-                    bonus: "เหมาะสำหรับสายเปิดกาชาลุ้นตัว Secret"
-                },
-                credentials: { user: "GemHunter_AD40K", pass: "LuckyDraw#404" },
-                sold: false
-            },
-            {
-                id: 8,
-                code: "KL-055",
-                game: "King Legacy",
-                title: "ไก่ตัน King Legacy เลเวล 4800 + เงิน 50M + สุ่มผลแรร์",
-                price: 69,
-                originalPrice: 120,
-                image: "https://placehold.co/600x360/111827/c084fc?text=KING+LEGACY+KAI+TAN",
-                badges: ["ไอดีไก่ตัน", "ราคาประหยัด"],
-                highlights: ["เลเวล 4,800 (ตัน)", "เงินเบลี 50M+", "มีผลในกระเป๋า"],
-                details: {
-                    level: "4,800 (MAX)",
-                    fruits: "สุ่มผลระดับ Epic - Legendary ในกระเป๋า",
-                    weapons: "ดาบระดับสูงพร้อมฟาร์มบอส",
-                    currency: "52,000,000 Beli / 80 Gems",
-                    security: "ไม่ผูกเมล / ไม่ผูกเบอร์โทร",
-                    bonus: "พร้อมเล่นทันที ราคาประหยัดที่สุด"
-                },
-                credentials: { user: "KL_StarterPro77", pass: "KingFarm@1122" },
-                sold: false
+                category: 'random',
+                tag: 'โปรโมชั่นเปิดร้าน',
+                title: 'กล่องสุ่มผลปีศาจถาวร OHMSHOP',
+                desc: 'ลุ้นรับไอดีที่มีผลปีศาจถาวรติดตัว (ผลพระถาวร / ผลประตูถาวร / ผลเสือถาวร) คุ้มเกินราคาแน่นอน',
+                price: 49,
+                stock: 18,
+                badgeColor: 'from-indigo-500 to-cyan-500'
             }
         ];
 
-        function loadAccountsFromStorage() {
-            try {
-                const saved = localStorage.getItem('blox_nexus_accounts');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                }
-            } catch (err) {
-                console.warn('Failed to parse accounts from localStorage:', err);
-            }
-            const clone = JSON.parse(JSON.stringify(defaultAccountsData));
-            try {
-                localStorage.setItem('blox_nexus_accounts', JSON.stringify(clone));
-            } catch (e) {}
-            return clone;
-        }
+        let selectedProduct = null;
 
-        function saveAccountsToStorage() {
-            try {
-                localStorage.setItem('blox_nexus_accounts', JSON.stringify(accountsData));
-            } catch (err) {
-                showToast('พื้นที่จัดเก็บในเบราว์เซอร์เต็ม บางรูปภาพอาจไม่ถูกบันทึกถาวร', 'info');
-            }
-        }
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
 
-        let accountsData = loadAccountsFromStorage();
-        let currentCategory = 'all';
-        let cart = [];
-        let discountAmount = 0;
-        let appliedCode = '';
-        let orderHistory = [];
-        try {
-            orderHistory = JSON.parse(localStorage.getItem('blox_nexus_history') || '[]');
-            if (!Array.isArray(orderHistory)) orderHistory = [];
-        } catch (err) {
-            orderHistory = [];
-        }
+            const filtered = filter === 'all' 
+                ? products 
+                : products.filter(p => p.category === filter);
 
-        let isAdminAuthenticated = false;
-        try {
-            isAdminAuthenticated = sessionStorage.getItem('blox_nexus_admin_auth') === 'true';
-        } catch (e) {}
-
-        let adminRevealAll = false;
-        let revealedRowIds = new Set();
-        let uploadedSlipData = null;
-
-        const defaultQrConfig = {
-            customImageDataUrl: '',
-            accountName: 'นภาเดช ศิริพันธุ์',
-            accountRef: '140-**********-628'
-        };
-
-        function loadQrConfig() {
-            try {
-                const saved = localStorage.getItem('blox_nexus_qr_config');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    return {
-                        customImageDataUrl: parsed.customImageDataUrl || '',
-                        accountName: parsed.accountName || defaultQrConfig.accountName,
-                        accountRef: parsed.accountRef || defaultQrConfig.accountRef
-                    };
-                }
-            } catch (err) {
-                console.warn('Failed to load QR config:', err);
-            }
-            return { ...defaultQrConfig };
-        }
-
-        let qrConfig = loadQrConfig();
-        let pendingAdminQrDataUrl = null;
-        let pendingAdminQrFileName = '';
-
-        function buildQrMatrix(seedText) {
-            const size = 29;
-            const matrix = Array.from({ length: size }, () => Array(size).fill(false));
-            const reserved = Array.from({ length: size }, () => Array(size).fill(false));
-
-            function placeFinder(top, left) {
-                for (let r = -1; r <= 7; r++) {
-                    for (let c = -1; c <= 7; c++) {
-                        const rr = top + r;
-                        const cc = left + c;
-                        if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
-                        reserved[rr][cc] = true;
-                        const inBorder = r === -1 || r === 7 || c === -1 || c === 7;
-                        if (inBorder) {
-                            matrix[rr][cc] = false;
-                            continue;
-                        }
-                        const isOuter = r === 0 || r === 6 || c === 0 || c === 6;
-                        const isInner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
-                        matrix[rr][cc] = isOuter || isInner;
-                    }
-                }
-            }
-
-            placeFinder(0, 0);
-            placeFinder(0, size - 7);
-            placeFinder(size - 7, 0);
-
-            for (let r = 18; r <= 22; r++) {
-                for (let c = 18; c <= 22; c++) {
-                    reserved[r][c] = true;
-                    const edge = r === 18 || r === 22 || c === 18 || c === 22;
-                    const center = r === 20 && c === 20;
-                    matrix[r][c] = edge || center;
-                }
-            }
-
-            for (let i = 8; i < size - 8; i++) {
-                reserved[6][i] = true;
-                reserved[i][6] = true;
-                matrix[6][i] = i % 2 === 0;
-                matrix[i][6] = i % 2 === 0;
-            }
-
-            reserved[size - 8][8] = true;
-            matrix[size - 8][8] = true;
-
-            let hash = 2166136261 >>> 0;
-            const str = String(seedText || 'BLOX-NEXUS');
-            for (let i = 0; i < str.length; i++) {
-                hash ^= str.charCodeAt(i);
-                hash = Math.imul(hash, 16777619) >>> 0;
-            }
-
-            function nextBit() {
-                hash ^= hash << 13;
-                hash >>>= 0;
-                hash ^= hash >>> 17;
-                hash >>>= 0;
-                hash ^= hash << 5;
-                hash >>>= 0;
-                return (hash & 1) === 1;
-            }
-
-            for (let r = 0; r < size; r++) {
-                for (let c = 0; c < size; c++) {
-                    if (reserved[r][c]) continue;
-                    const inCenterLogoZone = r >= 11 && r <= 17 && c >= 11 && c <= 17;
-                    if (inCenterLogoZone) {
-                        matrix[r][c] = false;
-                        continue;
-                    }
-                    matrix[r][c] = nextBit();
-                }
-            }
-
-            return { matrix, size };
-        }
-
-        function drawQrCanvas(canvasId, customDataUrl = '') {
-            try {
-                const canvas = document.getElementById(canvasId);
-                if (!canvas) return;
-
-                const rect = canvas.getBoundingClientRect();
-                const baseDim = Math.max(160, Math.round(rect.width || rect.height || 220));
-                const dpr = Math.min(window.devicePixelRatio || 1, 3);
-                const pixelDim = Math.round(baseDim * dpr);
-
-                if (canvas.width !== pixelDim || canvas.height !== pixelDim) {
-                    canvas.width = pixelDim;
-                    canvas.height = pixelDim;
-                }
-
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return;
-
-                ctx.save();
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, pixelDim, pixelDim);
-
-                const renderVectorQr = () => {
-                    const seed = `${qrConfig.accountName}|${qrConfig.accountRef}`;
-                    const { matrix, size } = buildQrMatrix(seed);
-                    const quietZone = 2;
-                    const totalCells = size + quietZone * 2;
-                    const cellSize = pixelDim / totalCells;
-
-                    ctx.fillStyle = '#090d16';
-                    for (let r = 0; r < size; r++) {
-                        for (let c = 0; c < size; c++) {
-                            if (matrix[r][c]) {
-                                const x = Math.floor((c + quietZone) * cellSize);
-                                const y = Math.floor((r + quietZone) * cellSize);
-                                const w = Math.ceil(cellSize);
-                                const h = Math.ceil(cellSize);
-                                ctx.fillRect(x, y, w, h);
-                            }
-                        }
-                    }
-
-                    const badgeSize = Math.round(pixelDim * 0.21);
-                    const bx = Math.round((pixelDim - badgeSize) / 2);
-                    const by = Math.round((pixelDim - badgeSize) / 2);
-                    const radius = Math.max(6, Math.round(badgeSize * 0.18));
-
-                    ctx.fillStyle = '#ffffff';
-                    ctx.beginPath();
-                    ctx.roundRect(bx - 3 * dpr, by - 3 * dpr, badgeSize + 6 * dpr, badgeSize + 6 * dpr, radius + 2 * dpr);
-                    ctx.fill();
-
-                    ctx.fillStyle = '#113566';
-                    ctx.beginPath();
-                    ctx.roundRect(bx, by, badgeSize, badgeSize, radius);
-                    ctx.fill();
-
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = `bold ${Math.max(10, Math.round(badgeSize * 0.44))}px Inter, sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText('QR', bx + badgeSize / 2, by + badgeSize / 2 + 1 * dpr);
-                };
-
-                if (customDataUrl && typeof customDataUrl === 'string' && customDataUrl.startsWith('data:image/')) {
-                    const img = new Image();
-                    img.onload = () => {
-                        try {
-                            const c2 = document.getElementById(canvasId);
-                            if (!c2) return;
-                            const ctx2 = c2.getContext('2d');
-                            if (!ctx2) return;
-                            const pad = Math.round(pixelDim * 0.04);
-                            const availW = pixelDim - pad * 2;
-                            const availH = pixelDim - pad * 2;
-                            const ratio = Math.min(availW / img.width, availH / img.height);
-                            const drawW = Math.round(img.width * ratio);
-                            const drawH = Math.round(img.height * ratio);
-                            const dx = Math.round((pixelDim - drawW) / 2);
-                            const dy = Math.round((pixelDim - drawH) / 2);
-
-                            ctx2.save();
-                            ctx2.setTransform(1, 0, 0, 1, 0, 0);
-                            ctx2.fillStyle = '#ffffff';
-                            ctx2.fillRect(0, 0, pixelDim, pixelDim);
-                            ctx2.drawImage(img, dx, dy, drawW, drawH);
-                            ctx2.restore();
-                        } catch (drawErr) {
-                            renderVectorQr();
-                        }
-                    };
-                    img.onerror = () => {
-                        renderVectorQr();
-                    };
-                    img.src = customDataUrl;
-                } else {
-                    renderVectorQr();
-                }
-
-                ctx.restore();
-            } catch (err) {
-                console.warn('drawQrCanvas error:', err);
-            }
-        }
-
-        function applyQrConfigToUI(overrideAdminPreviewUrl = null) {
-            const nameEls = ['checkout-qr-name', 'zoom-qr-name'];
-            nameEls.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = qrConfig.accountName;
-            });
-
-            const refEls = ['checkout-qr-ref', 'zoom-qr-ref'];
-            refEls.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = qrConfig.accountRef;
-            });
-
-            drawQrCanvas('checkout-qr-canvas', qrConfig.customImageDataUrl);
-            drawQrCanvas('zoom-qr-canvas', qrConfig.customImageDataUrl);
-
-            const adminImgSrc = overrideAdminPreviewUrl !== null ? overrideAdminPreviewUrl : qrConfig.customImageDataUrl;
-            drawQrCanvas('admin-qr-canvas', adminImgSrc);
-        }
-
-        function triggerFilePicker(inputId) {
-            try {
-                const input = document.getElementById(inputId);
-                if (!input) return;
-                input.value = '';
-                if (typeof input.showPicker === 'function') {
-                    try {
-                        input.showPicker();
-                        return;
-                    } catch (pickerErr) {}
-                }
-                input.click();
-            } catch (err) {
-                showToast('ไม่สามารถเปิดหน้าต่างเลือกไฟล์ได้ กรุณาลองอีกครั้ง', 'info');
-            }
-        }
-
-        function readImageFileAsDataUrl(file, onSuccess) {
-            if (!file) return;
-            if (file.type && !file.type.startsWith('image/')) {
-                showToast('กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, WEBP)', 'info');
-                return;
-            }
-
-            try {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    if (e && e.target && typeof e.target.result === 'string') {
-                        onSuccess(e.target.result, file.name || 'image.png');
-                    }
-                };
-                reader.onerror = function () {
-                    try {
-                        const objUrl = URL.createObjectURL(file);
-                        onSuccess(objUrl, file.name || 'image.png');
-                    } catch (urlErr) {
-                        showToast('เกิดข้อผิดพลาดในการอ่านไฟล์รูปภาพ', 'info');
-                    }
-                };
-                reader.readAsDataURL(file);
-            } catch (err) {
-                showToast('ไม่สามารถอ่านไฟล์รูปภาพได้', 'info');
-            }
-        }
-
-        function handleSlipFileChange(event) {
-            const file = event?.target?.files?.[0];
-            if (!file) return;
-            readImageFileAsDataUrl(file, (dataUrl, fileName) => {
-                applyUploadedSlip(dataUrl, fileName);
-                showToast('แนบรูปภาพสลิปเรียบร้อยแล้ว', 'success');
-            });
-        }
-
-        function applyUploadedSlip(dataUrl, fileName) {
-            uploadedSlipData = { name: fileName, dataUrl };
-            const placeholder = document.getElementById('slip-placeholder');
-            const previewBox = document.getElementById('slip-preview-box');
-            const previewImg = document.getElementById('slip-preview-img');
-            const fileNameEl = document.getElementById('slip-file-name');
-            const dropzone = document.getElementById('slip-dropzone');
-
-            if (placeholder) placeholder.classList.add('hidden');
-            if (previewBox) previewBox.classList.remove('hidden');
-            if (previewImg) previewImg.src = dataUrl;
-            if (fileNameEl) fileNameEl.textContent = fileName;
-            if (dropzone) dropzone.classList.add('border-emerald-500/60', 'bg-emerald-500/5');
-        }
-
-        function attachSampleSlipFallback() {
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200">
-                <rect width="320" height="200" rx="14" fill="#101827"/>
-                <rect x="14" y="14" width="292" height="172" rx="10" fill="#182235" stroke="#10b981" stroke-width="2"/>
-                <text x="160" y="68" fill="#34d399" font-family="sans-serif" font-size="18" font-weight="bold" text-anchor="middle">SLIP VERIFIED (TEST)</text>
-                <text x="160" y="102" fill="#f8fafc" font-family="sans-serif" font-size="13" text-anchor="middle">บัญชี: นภาเดช ศิริพันธุ์</text>
-                <text x="160" y="128" fill="#38bdf8" font-family="sans-serif" font-size="12" text-anchor="middle">BLOX-NEXUS AUTO STORE</text>
-            </svg>`;
-            const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-            applyUploadedSlip(dataUrl, 'test-slip-transfer.svg');
-            showToast('แนบสลิปทดสอบเรียบร้อยแล้ว', 'success');
-        }
-
-        function resetSlipUpload() {
-            uploadedSlipData = null;
-            const input = document.getElementById('slip-upload-input');
-            if (input) input.value = '';
-            const placeholder = document.getElementById('slip-placeholder');
-            const previewBox = document.getElementById('slip-preview-box');
-            const dropzone = document.getElementById('slip-dropzone');
-            if (placeholder) placeholder.classList.remove('hidden');
-            if (previewBox) previewBox.classList.add('hidden');
-            if (dropzone) dropzone.classList.remove('border-emerald-500/60', 'bg-emerald-500/5');
-        }
-
-        function handleAccountImageFileChange(event) {
-            const file = event?.target?.files?.[0];
-            if (!file) return;
-            readImageFileAsDataUrl(file, (dataUrl, fileName) => {
-                const urlInput = document.getElementById('form-acc-image');
-                const labelEl = document.getElementById('form-acc-file-label');
-                if (urlInput) urlInput.value = dataUrl;
-                if (labelEl) labelEl.textContent = `ไฟล์: ${fileName}`;
-                syncAccountImagePreview(dataUrl);
-                showToast('อัปโหลดรูปภาพสินค้าเรียบร้อยแล้ว', 'success');
-            });
-        }
-
-        function syncAccountImagePreview(srcVal) {
-            const imgEl = document.getElementById('form-acc-image-preview');
-            if (!imgEl) return;
-            const trimmed = (srcVal || '').trim();
-            imgEl.src = trimmed || 'https://placehold.co/600x360/1e1b4b/38bdf8?text=ROBLOX+ID';
-        }
-
-        function handleAdminQrFileChange(event) {
-            const file = event?.target?.files?.[0];
-            if (!file) return;
-            readImageFileAsDataUrl(file, (dataUrl, fileName) => {
-                pendingAdminQrDataUrl = dataUrl;
-                pendingAdminQrFileName = fileName;
-                const labelEl = document.getElementById('admin-qr-file-name');
-                if (labelEl) labelEl.textContent = `ไฟล์ที่เลือก: ${fileName}`;
-                drawQrCanvas('admin-qr-canvas', pendingAdminQrDataUrl);
-                showToast('โหลดตัวอย่าง QR Code ใหม่เรียบร้อย', 'success');
-            });
-        }
-
-        function bindUploadInteractions() {
-            const slipDropzone = document.getElementById('slip-dropzone');
-            if (slipDropzone) {
-                slipDropzone.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    triggerFilePicker('slip-upload-input');
-                });
-                slipDropzone.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        triggerFilePicker('slip-upload-input');
-                    }
-                });
-            }
-
-            const slipInput = document.getElementById('slip-upload-input');
-            if (slipInput) slipInput.addEventListener('change', handleSlipFileChange);
-
-            const accDropzone = document.getElementById('form-acc-image-dropzone');
-            if (accDropzone) {
-                accDropzone.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    triggerFilePicker('form-acc-image-file');
-                });
-            }
-
-            const accFileInput = document.getElementById('form-acc-image-file');
-            if (accFileInput) accFileInput.addEventListener('change', handleAccountImageFileChange);
-
-            const qrFileInput = document.getElementById('admin-qr-file');
-            if (qrFileInput) qrFileInput.addEventListener('change', handleAdminQrFileChange);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            bindUploadInteractions();
-            applyQrConfigToUI();
-            renderAccounts();
-            updateCartUI();
-            updateHistoryBadge();
-        });
-
-        window.addEventListener('resize', () => {
-            drawQrCanvas('checkout-qr-canvas', qrConfig.customImageDataUrl);
-            const zoomModal = document.getElementById('qr-zoom-modal');
-            if (zoomModal && !zoomModal.classList.contains('hidden')) {
-                drawQrCanvas('zoom-qr-canvas', qrConfig.customImageDataUrl);
-            }
-            const adminQrModal = document.getElementById('admin-qr-modal');
-            if (adminQrModal && !adminQrModal.classList.contains('hidden')) {
-                drawQrCanvas('admin-qr-canvas', pendingAdminQrDataUrl !== null ? pendingAdminQrDataUrl : qrConfig.customImageDataUrl);
-            }
-        });
-
-        function renderAccounts() {
-            const grid = document.getElementById('accounts-grid');
-            const emptyState = document.getElementById('empty-state');
-            const resultCount = document.getElementById('result-count');
-            if (!grid || !emptyState) return;
-
-            const searchInput = document.getElementById('search-input');
-            const priceFilterEl = document.getElementById('price-filter');
-            const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
-            const priceRange = priceFilterEl ? priceFilterEl.value : 'all';
-
-            const filtered = accountsData.filter(acc => {
-                if (currentCategory !== 'all' && acc.game !== currentCategory) return false;
-                if (priceRange === '0-100' && acc.price > 100) return false;
-                if (priceRange === '101-300' && (acc.price < 101 || acc.price > 300)) return false;
-                if (priceRange === '301-600' && (acc.price < 301 || acc.price > 600)) return false;
-                if (priceRange === '601+' && acc.price <= 600) return false;
-
-                if (query) {
-                    const matchTitle = acc.title.toLowerCase().includes(query);
-                    const matchGame = acc.game.toLowerCase().includes(query);
-                    const matchCode = acc.code.toLowerCase().includes(query);
-                    const matchBadges = acc.badges.some(b => b.toLowerCase().includes(query));
-                    const matchHighlights = acc.highlights.some(h => h.toLowerCase().includes(query));
-                    if (!matchTitle && !matchGame && !matchCode && !matchBadges && !matchHighlights) return false;
-                }
-                return true;
-            });
-
-            if (resultCount) resultCount.textContent = filtered.length;
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            grid.innerHTML = filtered.map(acc => {
-                const isInCart = cart.some(item => item.id === acc.id);
-                const fallbackImg = 'https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+NEXUS';
-                return `
-                <div class="group bg-[#121217] rounded-2xl border ${acc.sold ? 'border-gray-800/60 opacity-75' : 'border-gray-800 hover:border-cyan-400/60'} overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-neon-blue">
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between card-hover';
+                card.innerHTML = `
                     <div>
-                        <div class="relative h-44 bg-gray-900 overflow-hidden">
-                            <img src="${acc.image}" onerror="this.onerror=null;this.src='${fallbackImg}';" alt="${acc.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#121217] via-transparent to-black/30"></div>
-
-                            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/10 text-[11px] font-semibold text-cyan-300">
-                                ${acc.game}
+                        <div class="h-32 bg-gradient-to-r ${item.badgeColor} p-5 flex flex-col justify-between relative overflow-hidden">
+                            <span class="self-start bg-slate-950/75 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">
+                                ${item.tag}
                             </span>
-
-                            <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-purple-600/90 text-white font-gaming text-xs font-bold">
-                                #${acc.code}
-                            </span>
-
-                            ${acc.sold ? `
-                            <div class="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex items-center justify-center">
-                                <span class="px-4 py-1.5 rounded-xl bg-red-600/90 text-white font-bold text-sm tracking-wider border border-red-400/50 -rotate-6">
-                                    ขายแล้ว (SOLD OUT)
-                                </span>
-                            </div>` : ''}
-
-                            <div class="absolute bottom-2.5 left-3 right-3 flex flex-wrap gap-1.5">
-                                ${acc.badges.map(b => `
-                                    <span class="px-2 py-0.5 rounded-md bg-[#1a1a24]/95 border border-purple-500/40 text-purple-200 text-[11px] font-medium">
-                                        ${b}
-                                    </span>
-                                `).join('')}
+                            <div class="font-eng font-extrabold text-white/90 text-xl tracking-wide drop-shadow">
+                                OHMSHOP PASS
                             </div>
                         </div>
-
-                        <div class="p-4 space-y-3">
-                            <h3 class="font-bold text-white text-base line-clamp-2 group-hover:text-cyan-300 transition-colors min-h-[3rem]">
-                                ${acc.title}
-                            </h3>
-
-                            <ul class="space-y-1.5 text-xs text-gray-400 bg-[#0c0c10] p-3 rounded-xl border border-gray-800/80">
-                                ${acc.highlights.map(item => `
-                                    <li class="flex items-center gap-2">
-                                        <i class="fa-solid fa-circle-check text-cyan-400 text-[10px] shrink-0"></i>
-                                        <span class="truncate text-gray-300">${item}</span>
-                                    </li>
-                                `).join('')}
-                            </ul>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-white mb-2">${item.title}</h3>
+                            <p class="text-slate-400 text-sm line-clamp-3 leading-relaxed">${item.desc}</p>
                         </div>
                     </div>
-
-                    <div class="p-4 pt-0 space-y-3">
-                        <div class="flex items-end justify-between border-t border-gray-800/80 pt-3">
-                            <div>
-                                <span class="text-xs text-gray-500 line-through block">฿${acc.originalPrice}</span>
-                                <span class="text-2xl font-gaming font-bold text-cyan-400">฿${acc.price}</span>
-                            </div>
-                            <span class="text-[11px] text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-lg">
-                                <i class="fa-solid fa-bolt"></i> พร้อมส่ง
-                            </span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <button type="button" onclick="openDetailModal(${acc.id})" class="py-2.5 px-3 rounded-xl bg-[#1b1b24] hover:bg-[#252532] border border-gray-700 text-gray-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5">
-                                <i class="fa-regular fa-eye text-purple-400"></i> ดูรายละเอียด
-                            </button>
-
-                            ${acc.sold ? `
-                                <button type="button" disabled class="py-2.5 px-3 rounded-xl bg-gray-800 text-gray-500 text-xs font-semibold cursor-not-allowed">
-                                    สินค้าหมด
-                                </button>
-                            ` : isInCart ? `
-                                <button type="button" onclick="toggleCart(true)" class="py-2.5 px-3 rounded-xl bg-emerald-600/20 border border-emerald-500/50 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5">
-                                    <i class="fa-solid fa-check"></i> อยู่ในตะกร้า
-                                </button>
-                            ` : `
-                                <button type="button" onclick="addToCart(${acc.id})" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white text-xs font-semibold shadow-sm transition-all flex items-center justify-center gap-1.5 active:scale-95">
-                                    <i class="fa-solid fa-cart-plus"></i> หยิบใส่ตะกร้า
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
-
-        function setCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                if (btn.dataset.cat === cat) {
-                    btn.className = "cat-btn active px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-neon-purple transition-all";
-                } else {
-                    btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-medium bg-[#1a1a22] text-gray-300 hover:text-white border border-gray-800 hover:border-cyan-400/50 transition-all";
-                }
-            });
-            renderAccounts();
-        }
-
-        function syncSearch(val) {
-            const desktopInput = document.getElementById('search-input');
-            if (desktopInput) desktopInput.value = val;
-            renderAccounts();
-        }
-
-        function filterAccounts() {
-            const desktopInput = document.getElementById('search-input');
-            const mobileInput = document.getElementById('search-input-mobile');
-            if (desktopInput && mobileInput) mobileInput.value = desktopInput.value;
-            renderAccounts();
-        }
-
-        function resetFilters() {
-            currentCategory = 'all';
-            const desktopInput = document.getElementById('search-input');
-            const mobileInput = document.getElementById('search-input-mobile');
-            const priceFilter = document.getElementById('price-filter');
-            if (desktopInput) desktopInput.value = '';
-            if (mobileInput) mobileInput.value = '';
-            if (priceFilter) priceFilter.value = 'all';
-            setCategory('all');
-        }
-
-        function openDetailModal(id) {
-            const acc = accountsData.find(a => a.id === id);
-            if (!acc) return;
-
-            const isInCart = cart.some(item => item.id === acc.id);
-            const modal = document.getElementById('detail-modal');
-            const content = document.getElementById('detail-modal-content');
-            const fallbackImg = 'https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+NEXUS';
-
-            content.innerHTML = `
-                <div class="relative h-56 sm:h-64 bg-gray-900">
-                    <img src="${acc.image}" onerror="this.onerror=null;this.src='${fallbackImg}';" alt="${acc.title}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#121218] via-[#121218]/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-6 right-14">
-                        <div class="flex flex-wrap items-center gap-2 mb-2">
-                            <span class="px-3 py-1 rounded-lg bg-cyan-500 text-gray-950 font-bold text-xs">${acc.game}</span>
-                            <span class="px-2.5 py-1 rounded-lg bg-purple-600 text-white font-gaming font-bold text-xs">#${acc.code}</span>
-                            ${acc.badges.map(b => `<span class="px-2.5 py-1 rounded-lg bg-black/70 border border-white/15 text-gray-200 text-xs">${b}</span>`).join('')}
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-bold text-white">${acc.title}</h2>
-                    </div>
-                </div>
-
-                <div class="p-6 space-y-5">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                        <div class="bg-[#181820] p-3.5 rounded-xl border border-gray-800">
-                            <span class="text-xs text-gray-400 block mb-1"><i class="fa-solid fa-star text-amber-400 mr-1"></i> เลเวล / แรงก์</span>
-                            <span class="font-semibold text-white">${acc.details.level}</span>
-                        </div>
-                        <div class="bg-[#181820] p-3.5 rounded-xl border border-gray-800">
-                            <span class="text-xs text-gray-400 block mb-1"><i class="fa-solid fa-coins text-cyan-400 mr-1"></i> เงินและทรัพยากรในเกม</span>
-                            <span class="font-semibold text-white">${acc.details.currency}</span>
-                        </div>
-                        <div class="bg-[#181820] p-3.5 rounded-xl border border-gray-800 sm:col-span-2">
-                            <span class="text-xs text-gray-400 block mb-1"><i class="fa-solid fa-apple-whole text-purple-400 mr-1"></i> ผลปีศาจ / ยูนิต / สัตว์เลี้ยงที่มี</span>
-                            <span class="font-semibold text-white">${acc.details.fruits}</span>
-                        </div>
-                        <div class="bg-[#181820] p-3.5 rounded-xl border border-gray-800 sm:col-span-2">
-                            <span class="text-xs text-gray-400 block mb-1"><i class="fa-solid fa-khanda text-rose-400 mr-1"></i> อาวุธ / ไอเทมแรร์</span>
-                            <span class="font-semibold text-white">${acc.details.weapons}</span>
-                        </div>
-                        <div class="bg-emerald-500/10 p-3.5 rounded-xl border border-emerald-500/30 sm:col-span-2">
-                            <span class="text-xs text-emerald-400 block mb-1"><i class="fa-solid fa-shield-halved mr-1"></i> สถานะความปลอดภัยการผูกบัญชี</span>
-                            <span class="font-semibold text-emerald-200">${acc.details.security}</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#181820] p-3.5 rounded-xl border border-purple-500/20 text-xs text-gray-300 flex items-center gap-2.5">
-                        <i class="fa-solid fa-gift text-purple-400 text-base"></i>
-                        <span><b>ของแถมเพิ่มเติม:</b> ${acc.details.bonus}</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-800">
+                    <div class="px-5 pb-5 pt-2 border-t border-slate-800/70 flex items-center justify-between">
                         <div>
-                            <span class="text-xs text-gray-400">ราคาจำหน่าย</span>
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-gaming font-bold text-cyan-400">฿${acc.price}</span>
-                                <span class="text-sm text-gray-500 line-through">฿${acc.originalPrice}</span>
-                            </div>
+                            <div class="text-xs text-slate-400">คงเหลือ <span class="text-emerald-400 font-semibold">${item.stock}</span> ชิ้น</div>
+                            <div class="font-eng text-xl font-bold text-cyan-400">฿${item.price}</div>
                         </div>
-
-                        <div class="flex gap-3 w-full sm:w-auto">
-                            <button type="button" onclick="closeDetailModal()" class="flex-1 sm:flex-initial px-5 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-semibold">
-                                ปิดหน้าต่าง
-                            </button>
-                            ${acc.sold ? `
-                                <button type="button" disabled class="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-gray-800 text-gray-500 text-sm font-bold cursor-not-allowed">
-                                    ขายแล้ว
-                                </button>
-                            ` : `
-                                <button type="button" onclick="addToCart(${acc.id}); closeDetailModal(); toggleCart(true);" class="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white text-sm font-bold shadow-neon-purple flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-bolt"></i> ${isInCart ? 'ไปที่ตะกร้าสินค้า' : 'ซื้อรหัสนี้ทันที'}
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeDetailModal() {
-            const modal = document.getElementById('detail-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function toggleCart(open) {
-            const overlay = document.getElementById('cart-drawer-overlay');
-            const drawer = document.getElementById('cart-drawer');
-
-            if (open) {
-                resetDrawerSteps();
-                overlay.classList.remove('hidden');
-                requestAnimationFrame(() => drawer.classList.remove('translate-x-full'));
-            } else {
-                drawer.classList.add('translate-x-full');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
-        }
-
-        function resetDrawerSteps() {
-            const cartView = document.getElementById('cart-view');
-            const checkoutView = document.getElementById('checkout-view');
-            const deliveryView = document.getElementById('delivery-view');
-
-            cartView.classList.remove('hidden');
-            cartView.classList.add('flex');
-            checkoutView.classList.add('hidden');
-            checkoutView.classList.remove('flex');
-            deliveryView.classList.add('hidden');
-            deliveryView.classList.remove('flex');
-        }
-
-        function addToCart(id) {
-            const acc = accountsData.find(a => a.id === id);
-            if (!acc || acc.sold) return;
-            if (cart.some(item => item.id === id)) {
-                showToast('รหัสนี้อยู่ในตะกร้าของคุณแล้ว', 'info');
-                return;
-            }
-            cart.push(acc);
-            updateCartUI();
-            renderAccounts();
-            showToast(`เพิ่มรหัส #${acc.code} ลงตะกร้าแล้ว!`, 'success');
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            if (cart.length === 0) {
-                discountAmount = 0;
-                appliedCode = '';
-                document.getElementById('promo-input').value = '';
-                document.getElementById('promo-message').classList.add('hidden');
-            }
-            updateCartUI();
-            renderAccounts();
-        }
-
-        function updateCartUI() {
-            document.getElementById('cart-count').textContent = cart.length;
-            const listContainer = document.getElementById('cart-items-list');
-            const footer = document.getElementById('cart-footer');
-            const fallbackImg = 'https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+NEXUS';
-
-            if (cart.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-center py-12">
-                        <div class="w-16 h-16 rounded-2xl bg-gray-800/70 flex items-center justify-center text-gray-500 text-2xl mb-3">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </div>
-                        <p class="text-gray-300 font-medium">ตะกร้าสินค้ายังว่างอยู่</p>
-                        <p class="text-xs text-gray-500 mt-1">เลือกรหัส Roblox ที่ถูกใจแล้วหยิบใส่ตะกร้าได้เลย</p>
-                    </div>
-                `;
-                footer.classList.add('hidden');
-                return;
-            }
-
-            footer.classList.remove('hidden');
-            listContainer.innerHTML = cart.map(item => `
-                <div class="flex items-center gap-3 bg-[#181822] p-3 rounded-xl border border-gray-800">
-                    <img src="${item.image}" onerror="this.onerror=null;this.src='${fallbackImg}';" alt="${item.title}" class="w-16 h-16 rounded-lg object-cover shrink-0">
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-[10px] font-gaming font-bold px-1.5 py-0.5 rounded bg-purple-600/40 text-purple-300">#${item.code}</span>
-                            <span class="text-[11px] text-cyan-400 truncate">${item.game}</span>
-                        </div>
-                        <h4 class="text-xs font-semibold text-white truncate mt-1">${item.title}</h4>
-                        <div class="text-sm font-gaming font-bold text-cyan-400 mt-1">฿${item.price}</div>
-                    </div>
-                    <button type="button" onclick="removeFromCart(${item.id})" class="w-9 h-9 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition-colors shrink-0" aria-label="ลบสินค้าออกจากตะกร้า">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            `).join('');
-
-            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            const actualDiscount = Math.min(discountAmount, subtotal);
-            const total = Math.max(0, subtotal - actualDiscount);
-
-            document.getElementById('cart-subtotal').textContent = `฿${subtotal.toLocaleString()}`;
-            document.getElementById('cart-discount').textContent = `-฿${actualDiscount.toLocaleString()}`;
-            document.getElementById('cart-total').textContent = `฿${total.toLocaleString()}`;
-        }
-
-        function copyPromoCode() {
-            try {
-                const tempInput = document.createElement('input');
-                tempInput.value = 'NEXUS50';
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                showToast('คัดลอกโค้ดส่วนลด "NEXUS50" สำเร็จ!', 'success');
-            } catch (err) {
-                showToast('โค้ดส่วนลดคือ NEXUS50', 'info');
-            }
-        }
-
-        function applyDemoCode(codeStr = 'NEXUS50') {
-            document.getElementById('promo-input').value = codeStr;
-            applyPromoCode();
-        }
-
-        function applyPromoCode() {
-            const code = document.getElementById('promo-input').value.trim().toUpperCase();
-            const msg = document.getElementById('promo-message');
-            msg.classList.remove('hidden');
-
-            if (code === 'NEXUS50') {
-                discountAmount = 50;
-                appliedCode = code;
-                msg.textContent = '✓ ใช้โค้ด NEXUS50 สำเร็จ! ลดเพิ่ม 50 บาท';
-                msg.className = 'text-xs mt-1.5 text-emerald-400';
-                showToast('ใช้โค้ดส่วนลด 50 บาทสำเร็จ!', 'success');
-            } else if (code === 'ROBLOX100') {
-                discountAmount = 100;
-                appliedCode = code;
-                msg.textContent = '✓ ใช้โค้ด ROBLOX100 สำเร็จ! ลดเพิ่ม 100 บาท';
-                msg.className = 'text-xs mt-1.5 text-emerald-400';
-                showToast('ใช้โค้ดส่วนลด 100 บาทสำเร็จ!', 'success');
-            } else {
-                discountAmount = 0;
-                appliedCode = '';
-                msg.textContent = '✕ โค้ดส่วนลดไม่ถูกต้องหรือหมดอายุ (ลองใช้ NEXUS50 หรือ ROBLOX100)';
-                msg.className = 'text-xs mt-1.5 text-red-400';
-            }
-            updateCartUI();
-        }
-
-        function goToCheckout() {
-            if (cart.length === 0) return;
-            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            const total = Math.max(0, subtotal - Math.min(discountAmount, subtotal));
-
-            resetSlipUpload();
-            document.getElementById('checkout-amount').textContent = `฿${total.toLocaleString()}`;
-            document.getElementById('cart-view').classList.add('hidden');
-            document.getElementById('cart-view').classList.remove('flex');
-            const checkoutView = document.getElementById('checkout-view');
-            checkoutView.classList.remove('hidden');
-            checkoutView.classList.add('flex');
-
-            requestAnimationFrame(() => {
-                drawQrCanvas('checkout-qr-canvas', qrConfig.customImageDataUrl);
-            });
-        }
-
-        function backToCart() {
-            document.getElementById('checkout-view').classList.add('hidden');
-            document.getElementById('checkout-view').classList.remove('flex');
-            const cartView = document.getElementById('cart-view');
-            cartView.classList.remove('hidden');
-            cartView.classList.add('flex');
-        }
-
-        function selectPaymentMethod(method) {
-            const ppTab = document.getElementById('pay-tab-promptpay');
-            const tmTab = document.getElementById('pay-tab-truemoney');
-            const ppBox = document.getElementById('method-promptpay');
-            const tmBox = document.getElementById('method-truemoney');
-
-            if (method === 'promptpay') {
-                ppTab.className = "p-3 rounded-xl border-2 border-cyan-400 bg-cyan-500/10 text-white flex flex-col items-center gap-1 transition-all";
-                tmTab.className = "p-3 rounded-xl border border-gray-700 bg-[#181822] text-gray-400 flex flex-col items-center gap-1 transition-all";
-                ppBox.classList.remove('hidden');
-                tmBox.classList.add('hidden');
-                requestAnimationFrame(() => drawQrCanvas('checkout-qr-canvas', qrConfig.customImageDataUrl));
-            } else {
-                tmTab.className = "p-3 rounded-xl border-2 border-orange-400 bg-orange-500/10 text-white flex flex-col items-center gap-1 transition-all";
-                ppTab.className = "p-3 rounded-xl border border-gray-700 bg-[#181822] text-gray-400 flex flex-col items-center gap-1 transition-all";
-                tmBox.classList.remove('hidden');
-                ppBox.classList.add('hidden');
-            }
-        }
-
-        function openQrZoomModal() {
-            const modal = document.getElementById('qr-zoom-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            requestAnimationFrame(() => {
-                drawQrCanvas('zoom-qr-canvas', qrConfig.customImageDataUrl);
-            });
-        }
-
-        function closeQrZoomModal() {
-            const modal = document.getElementById('qr-zoom-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function confirmPayment() {
-            if (!uploadedSlipData) {
-                showToast('กรุณาอัปโหลดรูปภาพสลิปการโอนเงินก่อนกดยืนยัน', 'info');
-                const dropzone = document.getElementById('slip-dropzone');
-                if (dropzone) {
-                    dropzone.classList.add('border-amber-400');
-                    setTimeout(() => dropzone.classList.remove('border-amber-400'), 1500);
-                }
-                return;
-            }
-
-            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            const total = Math.max(0, subtotal - Math.min(discountAmount, subtotal));
-            const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
-            const now = new Date().toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
-
-            cart.forEach(cartItem => {
-                const target = accountsData.find(a => a.id === cartItem.id);
-                if (target) target.sold = true;
-            });
-            saveAccountsToStorage();
-
-            const newOrder = {
-                orderId,
-                date: now,
-                totalPaid: total,
-                promoCode: appliedCode || null,
-                slipFileName: uploadedSlipData.name,
-                items: JSON.parse(JSON.stringify(cart))
-            };
-            orderHistory.unshift(newOrder);
-            try {
-                localStorage.setItem('blox_nexus_history', JSON.stringify(orderHistory));
-            } catch (e) {}
-
-            const deliveredList = document.getElementById('delivered-accounts-list');
-            deliveredList.innerHTML = newOrder.items.map(item => `
-                <div class="bg-[#181822] border border-emerald-500/40 rounded-xl p-4 space-y-2.5">
-                    <div class="flex justify-between items-center gap-2">
-                        <span class="text-xs font-bold text-cyan-400">${item.game} (#${item.code})</span>
-                        <button type="button" onclick="copyCredentials('${item.credentials.user}:${item.credentials.pass}')" class="text-xs bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-2.5 py-1 rounded-lg transition-colors">
-                            <i class="fa-regular fa-copy mr-1"></i> คัดลอกทั้งหมด
+                        <button onclick="openBuyModal(${item.id})" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-md shadow-cyan-500/20">
+                            สั่งซื้อเลย
                         </button>
                     </div>
-                    <p class="text-xs text-gray-300 truncate">${item.title}</p>
-                    <div class="bg-[#0b0b0f] p-3 rounded-lg border border-gray-800 font-mono text-xs space-y-1">
-                        <div class="flex justify-between gap-2">
-                            <span class="text-gray-500">Username:</span>
-                            <span class="text-white font-bold select-all">${item.credentials.user}</span>
-                        </div>
-                        <div class="flex justify-between gap-2">
-                            <span class="text-gray-500">Password:</span>
-                            <span class="text-emerald-400 font-bold select-all">${item.credentials.pass}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            cart = [];
-            discountAmount = 0;
-            appliedCode = '';
-            document.getElementById('promo-input').value = '';
-            document.getElementById('promo-message').classList.add('hidden');
-
-            updateCartUI();
-            updateHistoryBadge();
-            renderAccounts();
-
-            document.getElementById('checkout-view').classList.add('hidden');
-            document.getElementById('checkout-view').classList.remove('flex');
-            const deliveryView = document.getElementById('delivery-view');
-            deliveryView.classList.remove('hidden');
-            deliveryView.classList.add('flex');
-
-            showToast('ชำระเงินสำเร็จ! ระบบจัดส่งรหัสเรียบร้อยแล้ว', 'success');
-        }
-
-        function finishOrderFlow() {
-            toggleCart(false);
-        }
-
-        function copyCredentials(text) {
-            try {
-                const tempInput = document.createElement('input');
-                tempInput.value = text;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                showToast('คัดลอก Username:Password เรียบร้อย!', 'success');
-            } catch (err) {
-                showToast(text, 'info');
-            }
-        }
-
-        function updateHistoryBadge() {
-            const badge = document.getElementById('history-badge');
-            if (!badge) return;
-            if (orderHistory.length > 0) {
-                badge.textContent = orderHistory.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function openHistoryModal() {
-            const modal = document.getElementById('history-modal');
-            const container = document.getElementById('history-list-container');
-
-            if (orderHistory.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-14">
-                        <div class="w-16 h-16 rounded-2xl bg-gray-800/80 flex items-center justify-center mx-auto mb-3 text-gray-500 text-2xl">
-                            <i class="fa-solid fa-receipt"></i>
-                        </div>
-                        <h4 class="text-base font-bold text-white">ยังไม่มีประวัติการสั่งซื้อ</h4>
-                        <p class="text-xs text-gray-400 mt-1">เมื่อคุณสั่งซื้อรหัส Roblox ข้อมูลรหัสผ่านทั้งหมดจะถูกบันทึกไว้ที่นี่</p>
-                    </div>
                 `;
-            } else {
-                container.innerHTML = orderHistory.map(order => `
-                    <div class="bg-[#181822] border border-gray-800 rounded-2xl p-4 space-y-3">
-                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-gray-800">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="px-2.5 py-1 rounded-lg bg-purple-600/30 border border-purple-500/40 text-purple-300 font-gaming font-bold text-xs">${order.orderId}</span>
-                                <span class="text-xs text-gray-400"><i class="fa-regular fa-clock mr-1"></i>${order.date}</span>
-                            </div>
-                            <div class="text-sm font-bold text-cyan-400 font-gaming">
-                                ยอดชำระ: ฿${Number(order.totalPaid || 0).toLocaleString()}
-                            </div>
-                        </div>
-
-                        <div class="space-y-2.5">
-                            ${(order.items || []).map(item => `
-                                <div class="bg-[#0e0e14] border border-gray-800/90 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <span class="text-[11px] text-cyan-400 font-semibold">${item.game} • #${item.code}</span>
-                                        <h5 class="text-xs font-bold text-white truncate">${item.title}</h5>
-                                    </div>
-                                    <div class="flex items-center gap-2 bg-[#16161f] px-3 py-2 rounded-lg border border-gray-700/80 font-mono text-xs shrink-0">
-                                        <div>
-                                            <span class="text-gray-400">ID:</span> <span class="text-white font-bold">${item.credentials.user}</span><br>
-                                            <span class="text-gray-400">PW:</span> <span class="text-emerald-400 font-bold">${item.credentials.pass}</span>
-                                        </div>
-                                        <button type="button" onclick="copyCredentials('${item.credentials.user}:${item.credentials.pass}')" class="ml-2 p-2 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 transition-colors" aria-label="คัดลอกรหัส">
-                                            <i class="fa-regular fa-copy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeHistoryModal() {
-            const modal = document.getElementById('history-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-
-            const styles = {
-                success: 'bg-[#15151e] border-emerald-500/60 text-emerald-300 shadow-lg',
-                info: 'bg-[#15151e] border-cyan-500/60 text-cyan-300 shadow-lg'
-            };
-            const icons = {
-                success: 'fa-circle-check text-emerald-400',
-                info: 'fa-circle-info text-cyan-400'
-            };
-
-            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${styles[type] || styles.info} text-sm font-medium transform transition-all duration-300 translate-y-4 opacity-0`;
-            toast.innerHTML = `
-                <i class="fa-solid ${icons[type] || icons.info} text-base shrink-0"></i>
-                <span>${message}</span>
-            `;
-
-            container.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.remove('translate-y-4', 'opacity-0'));
-
-            setTimeout(() => {
-                toast.classList.add('translate-y-4', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        const ADMIN_PIN = '1234';
-
-        function openAdminAccess() {
-            if (isAdminAuthenticated) {
-                openAdminDashboard();
-            } else {
-                const modal = document.getElementById('admin-login-modal');
-                document.getElementById('admin-pin-input').value = '';
-                document.getElementById('admin-pin-error').classList.add('hidden');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                setTimeout(() => document.getElementById('admin-pin-input').focus(), 100);
-            }
-        }
-
-        function closeAdminLoginModal() {
-            const modal = document.getElementById('admin-login-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function verifyAdminPin(e) {
-            e.preventDefault();
-            const inputPin = document.getElementById('admin-pin-input').value.trim();
-            const remember = document.getElementById('admin-remember-session').checked;
-            const errorEl = document.getElementById('admin-pin-error');
-
-            if (inputPin === ADMIN_PIN) {
-                isAdminAuthenticated = true;
-                if (remember) {
-                    try {
-                        sessionStorage.setItem('blox_nexus_admin_auth', 'true');
-                    } catch (err) {}
-                }
-                closeAdminLoginModal();
-                openAdminDashboard();
-                showToast('เข้าสู่ระบบหลังบ้านสำเร็จ!', 'success');
-            } else {
-                errorEl.classList.remove('hidden');
-                document.getElementById('admin-pin-input').value = '';
-                document.getElementById('admin-pin-input').focus();
-            }
-        }
-
-        function logoutAdmin() {
-            isAdminAuthenticated = false;
-            try {
-                sessionStorage.removeItem('blox_nexus_admin_auth');
-            } catch (err) {}
-            closeAdminDashboard();
-            showToast('ออกจากระบบหลังบ้านเรียบร้อย', 'info');
-        }
-
-        function openAdminDashboard() {
-            updateAdminStats();
-            renderAdminTable();
-            const modal = document.getElementById('admin-dashboard-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeAdminDashboard() {
-            const modal = document.getElementById('admin-dashboard-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            renderAccounts();
-        }
-
-        function updateAdminStats() {
-            const availableCount = accountsData.filter(a => !a.sold).length;
-            const soldCount = accountsData.filter(a => a.sold).length;
-            const totalRevenue = orderHistory.reduce((sum, ord) => sum + (Number(ord.totalPaid) || 0), 0);
-
-            document.getElementById('stat-available').textContent = availableCount;
-            document.getElementById('stat-sold').textContent = soldCount;
-            document.getElementById('stat-revenue').textContent = `฿${totalRevenue.toLocaleString()}`;
-            document.getElementById('stat-outofstock').textContent = soldCount;
-        }
-
-        function toggleAdminRevealAll() {
-            adminRevealAll = !adminRevealAll;
-            const btn = document.getElementById('admin-reveal-btn');
-            btn.innerHTML = adminRevealAll
-                ? `<i class="fa-regular fa-eye-slash text-amber-400"></i><span>ซ่อนรหัสผ่านทั้งหมด</span>`
-                : `<i class="fa-regular fa-eye text-cyan-400"></i><span>แสดงรหัสผ่านทั้งหมด</span>`;
-            renderAdminTable();
-        }
-
-        function toggleRowCredential(id) {
-            if (revealedRowIds.has(id)) {
-                revealedRowIds.delete(id);
-            } else {
-                revealedRowIds.add(id);
-            }
-            renderAdminTable();
-        }
-
-        function renderAdminTable() {
-            const tbody = document.getElementById('admin-table-body');
-            if (!tbody) return;
-            const query = (document.getElementById('admin-search-input')?.value || '').toLowerCase().trim();
-            const fallbackImg = 'https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+NEXUS';
-
-            const list = accountsData.filter(acc => {
-                if (!query) return true;
-                return acc.code.toLowerCase().includes(query) ||
-                    acc.title.toLowerCase().includes(query) ||
-                    acc.game.toLowerCase().includes(query) ||
-                    acc.credentials.user.toLowerCase().includes(query);
-            });
-
-            if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-gray-500">ไม่พบรายการรหัสที่ค้นหา</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = list.map(acc => {
-                const isRevealed = adminRevealAll || revealedRowIds.has(acc.id);
-                const maskedPass = '•'.repeat(Math.min(acc.credentials.pass.length, 10));
-                return `
-                <tr class="hover:bg-[#1a1a24] transition-colors">
-                    <td class="py-3 px-4">
-                        <div class="flex items-center gap-3">
-                            <img src="${acc.image}" onerror="this.onerror=null;this.src='${fallbackImg}';" alt="${acc.code}" class="w-12 h-12 rounded-lg object-cover border border-gray-700 shrink-0">
-                            <div class="min-w-0 max-w-xs">
-                                <span class="text-[10px] font-gaming font-bold px-1.5 py-0.5 rounded bg-purple-600/30 text-purple-300">#${acc.code}</span>
-                                <div class="font-semibold text-white truncate mt-1" title="${acc.title}">${acc.title}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4 whitespace-nowrap">
-                        <span class="px-2.5 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-medium">${acc.game}</span>
-                    </td>
-                    <td class="py-3 px-4 whitespace-nowrap">
-                        <div class="font-gaming font-bold text-sm text-cyan-400">฿${acc.price.toLocaleString()}</div>
-                        ${acc.originalPrice ? `<div class="text-[10px] text-gray-500 line-through">฿${acc.originalPrice.toLocaleString()}</div>` : ''}
-                    </td>
-                    <td class="py-3 px-4 whitespace-nowrap">
-                        <button type="button" onclick="quickToggleSoldStatus(${acc.id})" class="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold flex items-center gap-1.5 transition-all ${acc.sold ? 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25'}">
-                            <span class="w-1.5 h-1.5 rounded-full ${acc.sold ? 'bg-red-400' : 'bg-emerald-400'}"></span>
-                            ${acc.sold ? 'ขายแล้ว (Sold)' : 'พร้อมขาย'}
-                        </button>
-                    </td>
-                    <td class="py-3 px-4 whitespace-nowrap font-mono">
-                        <div class="flex items-center gap-2 bg-[#0d0d12] px-2.5 py-1.5 rounded-lg border border-gray-800 w-fit">
-                            <div>
-                                <div class="text-white text-[11px]">${acc.credentials.user}</div>
-                                <div class="text-emerald-400 text-[11px]">${isRevealed ? acc.credentials.pass : maskedPass}</div>
-                            </div>
-                            <button type="button" onclick="toggleRowCredential(${acc.id})" class="text-gray-400 hover:text-cyan-400 p-1" aria-label="แสดงหรือซ่อนรหัสผ่าน">
-                                <i class="fa-regular ${isRevealed ? 'fa-eye-slash' : 'fa-eye'}"></i>
-                            </button>
-                            <button type="button" onclick="copyCredentials('${acc.credentials.user}:${acc.credentials.pass}')" class="text-gray-400 hover:text-emerald-400 p-1" aria-label="คัดลอกข้อมูลไอดี">
-                                <i class="fa-regular fa-copy"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4 whitespace-nowrap text-right">
-                        <div class="inline-flex items-center gap-1.5">
-                            <button type="button" onclick="openAccountFormModal(${acc.id})" class="px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 border border-blue-500/30 text-blue-300 transition-colors">
-                                <i class="fa-solid fa-pen-to-square"></i> แก้ไข
-                            </button>
-                            <button type="button" onclick="promptDeleteAccount(${acc.id})" class="px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 text-red-300 transition-colors" aria-label="ลบสินค้า">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                `;
-            }).join('');
-        }
-
-        function quickToggleSoldStatus(id) {
-            const target = accountsData.find(a => a.id === id);
-            if (!target) return;
-            target.sold = !target.sold;
-            if (target.sold) {
-                cart = cart.filter(c => c.id !== id);
-                updateCartUI();
-            }
-            saveAccountsToStorage();
-            updateAdminStats();
-            renderAdminTable();
-            renderAccounts();
-            showToast(`อัปเดตสถานะ #${target.code} เป็น "${target.sold ? 'ขายแล้ว' : 'พร้อมขาย'}"`, 'info');
-        }
-
-        function setPresetImage(type) {
-            const input = document.getElementById('form-acc-image');
-            const labelEl = document.getElementById('form-acc-file-label');
-            const presets = {
-                bf: 'https://placehold.co/600x360/1e1b4b/38bdf8?text=BLOX+FRUITS+SPECIAL+ID',
-                ad: 'https://placehold.co/600x360/2e1065/c084fc?text=ANIME+DEFENDERS+RARE+ID',
-                ps: 'https://placehold.co/600x360/172554/60a5fa?text=PET+SIM+99+HUGE+ID'
-            };
-            const val = presets[type] || presets.bf;
-            input.value = val;
-            if (labelEl) labelEl.textContent = '';
-            syncAccountImagePreview(val);
-        }
-
-        function openAccountFormModal(editId = null) {
-            const modal = document.getElementById('account-form-modal');
-            const titleEl = document.getElementById('account-form-title');
-            const form = document.getElementById('account-form');
-            const fileLabel = document.getElementById('form-acc-file-label');
-            form.reset();
-            if (fileLabel) fileLabel.textContent = '';
-
-            if (editId) {
-                const acc = accountsData.find(a => a.id === editId);
-                if (!acc) return;
-                titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-purple-400"></i> แก้ไขข้อมูลรหัส #${acc.code}`;
-                document.getElementById('form-acc-id').value = acc.id;
-                document.getElementById('form-acc-code').value = acc.code;
-                document.getElementById('form-acc-game').value = acc.game;
-                document.getElementById('form-acc-title').value = acc.title;
-                document.getElementById('form-acc-price').value = acc.price;
-                document.getElementById('form-acc-original-price').value = acc.originalPrice || '';
-                document.getElementById('form-acc-sold').value = String(acc.sold);
-                document.getElementById('form-acc-image').value = acc.image;
-                document.getElementById('form-acc-badges').value = acc.badges.join(', ');
-                document.getElementById('form-acc-highlights').value = acc.highlights.join(', ');
-                document.getElementById('form-detail-level').value = acc.details.level;
-                document.getElementById('form-detail-currency').value = acc.details.currency;
-                document.getElementById('form-detail-fruits').value = acc.details.fruits;
-                document.getElementById('form-detail-weapons').value = acc.details.weapons;
-                document.getElementById('form-detail-security').value = acc.details.security;
-                document.getElementById('form-detail-bonus').value = acc.details.bonus;
-                document.getElementById('form-cred-user').value = acc.credentials.user;
-                document.getElementById('form-cred-pass').value = acc.credentials.pass;
-                syncAccountImagePreview(acc.image);
-            } else {
-                const defaultImg = 'https://placehold.co/600x360/1e1b4b/38bdf8?text=ROBLOX+PREMIUM+ID';
-                titleEl.innerHTML = `<i class="fa-solid fa-plus-circle text-cyan-400"></i> เพิ่มรหัส Roblox ใหม่`;
-                document.getElementById('form-acc-id').value = '';
-                document.getElementById('form-acc-code').value = 'ID-' + Math.floor(100 + Math.random() * 899);
-                document.getElementById('form-acc-image').value = defaultImg;
-                document.getElementById('form-acc-badges').value = 'พร้อมส่ง, ไอดีสะอาด';
-                document.getElementById('form-acc-highlights').value = 'เลเวลสูงพร้อมเล่น, ไอเทมแรร์ในตัว, เปลี่ยนรหัสได้ทันที';
-                syncAccountImagePreview(defaultImg);
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeAccountFormModal() {
-            const modal = document.getElementById('account-form-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function saveAccountForm(e) {
-            e.preventDefault();
-            const editIdVal = document.getElementById('form-acc-id').value;
-            const price = Number(document.getElementById('form-acc-price').value);
-            const origPriceVal = document.getElementById('form-acc-original-price').value;
-            const originalPrice = origPriceVal ? Number(origPriceVal) : Math.round(price * 1.4);
-
-            const badgesArr = document.getElementById('form-acc-badges').value
-                .split(',').map(s => s.trim()).filter(Boolean);
-            const highlightsArr = document.getElementById('form-acc-highlights').value
-                .split(',').map(s => s.trim()).filter(Boolean);
-
-            const newAccountObj = {
-                id: editIdVal ? Number(editIdVal) : Date.now(),
-                code: document.getElementById('form-acc-code').value.trim().toUpperCase(),
-                game: document.getElementById('form-acc-game').value,
-                title: document.getElementById('form-acc-title').value.trim(),
-                price: price,
-                originalPrice: originalPrice,
-                image: document.getElementById('form-acc-image').value.trim() || 'https://placehold.co/600x360/1e1b4b/38bdf8?text=ROBLOX+ID',
-                badges: badgesArr.length ? badgesArr : ['พร้อมส่ง'],
-                highlights: highlightsArr.length ? highlightsArr : ['ไอดีพร้อมเล่นทันที'],
-                details: {
-                    level: document.getElementById('form-detail-level').value.trim() || 'พร้อมเล่น',
-                    fruits: document.getElementById('form-detail-fruits').value.trim() || '-',
-                    weapons: document.getElementById('form-detail-weapons').value.trim() || '-',
-                    currency: document.getElementById('form-detail-currency').value.trim() || '-',
-                    security: document.getElementById('form-detail-security').value.trim() || 'ไม่ผูกอีเมล / ไม่ผูกเบอร์โทร',
-                    bonus: document.getElementById('form-detail-bonus').value.trim() || 'รับประกันหลังการขาย'
-                },
-                credentials: {
-                    user: document.getElementById('form-cred-user').value.trim(),
-                    pass: document.getElementById('form-cred-pass').value.trim()
-                },
-                sold: document.getElementById('form-acc-sold').value === 'true'
-            };
-
-            if (editIdVal) {
-                const idx = accountsData.findIndex(a => a.id === Number(editIdVal));
-                if (idx !== -1) {
-                    accountsData[idx] = newAccountObj;
-                    if (newAccountObj.sold) {
-                        cart = cart.filter(c => c.id !== newAccountObj.id);
-                    } else {
-                        const cIdx = cart.findIndex(c => c.id === newAccountObj.id);
-                        if (cIdx !== -1) cart[cIdx] = newAccountObj;
-                    }
-                    showToast(`แก้ไขข้อมูลรหัส #${newAccountObj.code} สำเร็จ!`, 'success');
-                }
-            } else {
-                accountsData.unshift(newAccountObj);
-                showToast(`เพิ่มรหัสใหม่ #${newAccountObj.code} เข้าสู่หน้าร้านแล้ว!`, 'success');
-            }
-
-            saveAccountsToStorage();
-            updateCartUI();
-            updateAdminStats();
-            renderAdminTable();
-            renderAccounts();
-            closeAccountFormModal();
-        }
-
-        function promptDeleteAccount(id) {
-            const acc = accountsData.find(a => a.id === id);
-            if (!acc) return;
-            document.getElementById('delete-confirm-text').textContent = `คุณต้องการลบรหัส #${acc.code} (${acc.title}) ออกจากระบบใช่หรือไม่?`;
-            const confirmBtn = document.getElementById('confirm-delete-btn');
-            confirmBtn.onclick = () => executeDeleteAccount(id);
-
-            const modal = document.getElementById('delete-confirm-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeDeleteConfirm() {
-            const modal = document.getElementById('delete-confirm-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function executeDeleteAccount(id) {
-            const acc = accountsData.find(a => a.id === id);
-            accountsData = accountsData.filter(a => a.id !== id);
-            cart = cart.filter(c => c.id !== id);
-
-            saveAccountsToStorage();
-            updateCartUI();
-            updateAdminStats();
-            renderAdminTable();
-            renderAccounts();
-            closeDeleteConfirm();
-            showToast(`ลบรหัส ${acc ? '#' + acc.code : ''} เรียบร้อยแล้ว`, 'info');
-        }
-
-        function resetDefaultAccounts() {
-            accountsData = JSON.parse(JSON.stringify(defaultAccountsData));
-            cart = [];
-            saveAccountsToStorage();
-            updateCartUI();
-            updateAdminStats();
-            renderAdminTable();
-            renderAccounts();
-            showToast('รีเซ็ตข้อมูลสินค้ากลับเป็นค่าเริ่มต้นเรียบร้อย!', 'success');
-        }
-
-        function openAdminQrModal() {
-            pendingAdminQrDataUrl = null;
-            pendingAdminQrFileName = '';
-            const qrFileEl = document.getElementById('admin-qr-file');
-            if (qrFileEl) qrFileEl.value = '';
-            document.getElementById('admin-qr-name-input').value = qrConfig.accountName;
-            document.getElementById('admin-qr-ref-input').value = qrConfig.accountRef;
-            document.getElementById('admin-qr-file-name').textContent = qrConfig.customImageDataUrl
-                ? 'กำลังใช้รูป QR ที่อัปโหลดเอง'
-                : `ใช้ QR Code มาตรฐานบัญชี ${qrConfig.accountName} (${qrConfig.accountRef})`;
-
-            const modal = document.getElementById('admin-qr-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            requestAnimationFrame(() => {
-                drawQrCanvas('admin-qr-canvas', qrConfig.customImageDataUrl);
+                grid.appendChild(card);
             });
         }
 
-        function closeAdminQrModal() {
-            const modal = document.getElementById('admin-qr-modal');
+        function filterProducts(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-slate-950');
+                btn.classList.add('bg-slate-900', 'text-slate-300', 'border', 'border-slate-800');
+            });
+            event.target.classList.remove('bg-slate-900', 'text-slate-300', 'border', 'border-slate-800');
+            event.target.classList.add('bg-cyan-500', 'text-slate-950');
+            renderProducts(category);
+        }
+
+        function openBuyModal(id) {
+            selectedProduct = products.find(p => p.id === id);
+            if (!selectedProduct) return;
+
+            document.getElementById('modal-tag').innerText = selectedProduct.tag;
+            document.getElementById('modal-title').innerText = selectedProduct.title;
+            document.getElementById('modal-desc').innerText = selectedProduct.desc;
+            document.getElementById('modal-price').innerText = '฿' + selectedProduct.price;
+
+            const modal = document.getElementById('buy-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function openTopupModal() {
+            const modal = document.getElementById('topup-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
 
-        function saveAdminQrSettings(e) {
-            e.preventDefault();
-            qrConfig = {
-                customImageDataUrl: pendingAdminQrDataUrl !== null ? pendingAdminQrDataUrl : qrConfig.customImageDataUrl,
-                accountName: document.getElementById('admin-qr-name-input').value.trim() || defaultQrConfig.accountName,
-                accountRef: document.getElementById('admin-qr-ref-input').value.trim() || defaultQrConfig.accountRef
-            };
-            try {
-                localStorage.setItem('blox_nexus_qr_config', JSON.stringify(qrConfig));
-            } catch (err) {
-                showToast('อัปเดต QR ในหน้าปัจจุบันแล้ว (รูปขนาดใหญ่อาจไม่ถูกบันทึกถาวร)', 'info');
-            }
-            applyQrConfigToUI();
-            closeAdminQrModal();
-            showToast('อัปเดต QR Code รับชำระเงินเรียบร้อยแล้ว!', 'success');
+        function confirmOrder() {
+            if (!selectedProduct) return;
+            alert(`เตรียมสั่งซื้อ "${selectedProduct.title}" ราคา ฿${selectedProduct.price}\n(เชื่อมต่อระบบตัดเครดิตและดึงรหัสอัตโนมัติจาก Supabase ในขั้นตอนถัดไป)`);
+            closeModal('buy-modal');
         }
 
-        function resetDefaultQrSettings() {
-            qrConfig = { ...defaultQrConfig };
-            pendingAdminQrDataUrl = null;
-            pendingAdminQrFileName = '';
-            try {
-                localStorage.removeItem('blox_nexus_qr_config');
-            } catch (err) {}
-            document.getElementById('admin-qr-name-input').value = qrConfig.accountName;
-            document.getElementById('admin-qr-ref-input').value = qrConfig.accountRef;
-            document.getElementById('admin-qr-file-name').textContent = `คืนค่า QR Code บัญชี ${qrConfig.accountName} (${qrConfig.accountRef})`;
-            applyQrConfigToUI('');
-            showToast('คืนค่า QR Code บัญชี นภาเดช ศิริพันธุ์ เรียบร้อย!', 'info');
-        }
+        // Initial render
+        renderProducts('all');
     </script>
 </body>
 </html>
