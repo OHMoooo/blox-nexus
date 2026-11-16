@@ -57,19 +57,41 @@
                 </div>
             </a>
 
-            <!-- Action Icons -->
-            <div class="flex items-center gap-2">
-                <button onclick="openTopupModal()" title="เติมเครดิต / บัญชี" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 hover:border-cyan-400/50 flex items-center justify-center text-cyan-400 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
+            <!-- Member, Admin & Cart Actions -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <!-- Admin Panel Button (Visible ONLY when logged in as OHM) -->
+                <button id="admin-nav-btn" onclick="openAdminModal()" class="hidden items-center gap-1 px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition shrink-0">
+                    <span>👑 หลังบ้าน</span>
                 </button>
-                <button onclick="showHistory()" title="ประวัติการสั่งซื้อ" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-400/50 flex items-center justify-center text-slate-300 transition">
+
+                <!-- Logged Out Button -->
+                <button id="auth-btn" onclick="openAuthModal('login')" class="px-3 py-1.5 rounded-full bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-semibold transition">
+                    เข้าสู่ระบบ / สมัคร
+                </button>
+
+                <!-- Logged In User Badge -->
+                <div id="user-badge" class="hidden items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-full pl-3 pr-1.5 py-1">
+                    <div class="text-xs">
+                        <span id="user-display-name" class="font-bold text-white">Member</span>
+                        <span class="text-emerald-400 font-eng font-bold ml-1">฿<span id="user-credit">0</span></span>
+                    </div>
+                    <button onclick="openTopupModal()" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold hover:bg-emerald-500/30">
+                        +เติม
+                    </button>
+                    <button onclick="logoutUser()" title="ออกจากระบบ" class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs">
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Order History -->
+                <button onclick="openHistoryModal()" title="ประวัติการรับรหัส" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-400/50 flex items-center justify-center text-slate-300 transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </button>
-                <button onclick="openCartModal()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-eng font-bold text-xs shadow-lg shadow-cyan-500/25 transition">
+
+                <!-- Cart Button -->
+                <button onclick="openCartModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-eng font-bold text-xs shadow-lg shadow-cyan-500/25 transition shrink-0">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
@@ -92,7 +114,6 @@
     <!-- Hero Section -->
     <header class="relative hero-glow border-b border-slate-800/60">
         <div class="max-w-5xl mx-auto px-4 pt-8 pb-10">
-            <!-- Promo Pill -->
             <div class="glass-card rounded-2xl p-3.5 mb-7 max-w-md">
                 <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
@@ -104,7 +125,6 @@
                 <div class="text-xs text-slate-300 mt-1 pl-4">ลดทันที 50 บาท</div>
             </div>
 
-            <!-- Main Headline -->
             <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-4">
                 ศูนย์รวมรหัส <span class="font-eng bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">ROBLOX</span><br>
                 ระดับเทพ ราคาคุ้มที่สุด!
@@ -114,12 +134,11 @@
                 คัดสรรไอดีคุณภาพ ทั้งไก่ตันพร้อมฟาร์ม ผลถาวร เผ่า V4 ตัน และตัวยูนิตแรร์ ระบบจัดส่งรหัสอัตโนมัติทันทีหลังชำระเงิน ไม่ต้องรอแอดมินตอบ
             </p>
 
-            <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 max-w-xs sm:max-w-md mb-9">
                 <a href="#shop-section" class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-cyan-500/25 transition">
                     <span>⚡ เลือกซื้อรหัสเลย</span>
                 </a>
-                <button onclick="copyPromoCode()" id="copy-btn" class="flex items-center justify-center gap-2 bg-[#121521] hover:bg-slate-800 border border-slate-700/80 text-white font-semibold py-3.5 px-6 rounded-2xl transition">
+                <button onclick="copyPromoCode()" class="flex items-center justify-center gap-2 bg-[#121521] hover:bg-slate-800 border border-slate-700/80 text-white font-semibold py-3.5 px-6 rounded-2xl transition">
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                     </svg>
@@ -127,7 +146,6 @@
                 </button>
             </div>
 
-            <!-- Trust Badges -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
                 <div class="flex items-center gap-3 bg-[#10131e] border border-slate-800/80 rounded-2xl p-3.5">
                     <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
@@ -176,7 +194,6 @@
             </div>
         </div>
 
-        <!-- Product Grid -->
         <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     </main>
 
@@ -191,6 +208,94 @@
         </div>
     </footer>
 
+    <!-- Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="auth-title" class="text-lg font-bold text-white">เข้าสู่ระบบ OHMSHOP</h3>
+                <button onclick="closeModal('auth-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 bg-[#080a10] p-1 rounded-xl border border-slate-800 mb-4">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition">
+                    เข้าสู่ระบบ
+                </button>
+                <button id="tab-register" onclick="switchAuthTab('register')" class="py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition">
+                    สมัครสมาชิกใหม่
+                </button>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">ชื่อผู้ใช้งาน (Username)</label>
+                    <input id="auth-username" type="text" required placeholder="กรอกชื่อผู้ใช้งาน..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div id="email-field" class="hidden">
+                    <label class="block text-xs text-slate-400 mb-1">อีเมลติดต่อ (ไม่บังคับ)</label>
+                    <input id="auth-email" type="email" placeholder="example@gmail.com" class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">รหัสผ่าน (Password)</label>
+                    <input id="auth-password" type="password" required placeholder="กรอกรหัสผ่าน..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <button id="auth-submit-btn" type="submit" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
+                    เข้าสู่ระบบ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Backend Modal (ONLY FOR OHM) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+        <div class="bg-[#111420] border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">👑</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-amber-300">ระบบจัดการหลังบ้าน OHMSHOP</h3>
+                        <p class="text-[11px] text-slate-400">สิทธิ์ผู้ดูแลระบบสูงสุด: <span class="text-white font-bold">OHM</span></p>
+                    </div>
+                </div>
+                <button onclick="closeModal('admin-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+
+            <!-- Credit Management Section -->
+            <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4 mb-5">
+                <h4 class="text-sm font-bold text-cyan-400 mb-3">💳 ปรับเครดิตสมาชิก</h4>
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">เลือกบัญชีสมาชิกที่ต้องการปรับยอด</label>
+                        <select id="admin-user-select" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">จำนวนเงิน (บาท)</label>
+                        <input id="admin-credit-amount" type="number" min="0" placeholder="เช่น 100" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <button onclick="adminAdjustCredit('add')" class="py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 text-xs font-bold transition">
+                            + เพิ่มเครดิต
+                        </button>
+                        <button onclick="adminAdjustCredit('sub')" class="py-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 hover:bg-rose-500/30 text-xs font-bold transition">
+                            - ลดเครดิต
+                        </button>
+                        <button onclick="adminAdjustCredit('set')" class="py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition">
+                            = ตั้งยอดใหม่
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member List Overview -->
+            <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h4 class="text-sm font-bold text-purple-400">👥 รายชื่อสมาชิกทั้งหมดในระบบ</h4>
+                    <span id="total-members-count" class="text-xs text-slate-400">0 คน</span>
+                </div>
+                <div id="admin-members-list" class="space-y-2 max-h-48 overflow-y-auto text-xs"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cart / Checkout Modal -->
     <div id="cart-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
@@ -201,7 +306,6 @@
 
             <div id="cart-items" class="space-y-2.5 max-h-52 overflow-y-auto mb-4 text-sm"></div>
 
-            <!-- Promo Code Input -->
             <div class="flex gap-2 mb-4">
                 <input id="promo-input" type="text" placeholder="ใส่โค้ดส่วนลด (เช่น OHM50)" class="flex-1 bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-white uppercase focus:outline-none focus:border-cyan-400">
                 <button onclick="applyPromo()" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm font-bold transition">
@@ -233,11 +337,22 @@
                 <h3 class="text-lg font-bold text-white">เติมเครดิต OHMSHOP</h3>
                 <button onclick="closeModal('topup-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <p class="text-xs sm:text-sm text-slate-400 mb-4">รองรับซองอั่งเปา TrueMoney Wallet และโอนเงินพร้อมเพย์ (พร้อมเชื่อมต่อฐานข้อมูล Supabase)</p>
-            <input type="text" placeholder="วางลิงก์ซองอั่งเปา TrueMoney..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white mb-4 focus:outline-none focus:border-cyan-400">
-            <button onclick="alert('พร้อมเชื่อมต่อระบบตรวจสอบยอดเงินอัตโนมัติในขั้นตอนถัดไปครับ!'); closeModal('topup-modal');" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition">
-                ยืนยันการเติมเงิน
+            <p class="text-xs sm:text-sm text-slate-400 mb-4">รองรับซองอั่งเปา TrueMoney Wallet และโอนเงินพร้อมเพย์ (แอดมินสามารถปรับยอดให้ได้ทันที)</p>
+            <input id="topup-link" type="text" placeholder="วางลิงก์ซองอั่งเปา TrueMoney..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white mb-4 focus:outline-none focus:border-cyan-400">
+            <button onclick="submitTopup()" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition">
+                แจ้งเติมเงิน
             </button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">ประวัติการรับรหัสอัตโนมัติ</h3>
+                <button onclick="closeModal('history-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div id="history-list" class="space-y-2.5 max-h-64 overflow-y-auto text-sm"></div>
         </div>
     </div>
 
@@ -305,8 +420,223 @@
             }
         ];
 
+        // ตั้งค่าบัญชีเริ่มต้นในระบบ (มีบัญชี Admin: OHM / 12345 ฝังไว้เสมอ)
+        const ADMIN_USERNAME = 'OHM';
+        const ADMIN_PASSWORD = '12345';
+
+        function getUsersDB() {
+            let users = JSON.parse(localStorage.getItem('ohmshop_users_db')) || [];
+            // ตรวจสอบว่ามีบัญชีแอดมิน OHM อยู่ในฐานข้อมูลหรือยัง ถ้ายังไม่มีให้สร้างอัตโนมัติ
+            const adminIndex = users.findIndex(u => u.username === ADMIN_USERNAME);
+            if (adminIndex === -1) {
+                users.unshift({
+                    username: ADMIN_USERNAME,
+                    password: ADMIN_PASSWORD,
+                    email: 'admin@ohmshop.store',
+                    credit: 99999,
+                    role: 'admin'
+                });
+                localStorage.setItem('ohmshop_users_db', JSON.stringify(users));
+            }
+            return users;
+        }
+
+        function saveUsersDB(users) {
+            localStorage.setItem('ohmshop_users_db', JSON.stringify(users));
+        }
+
         let cart = [];
         let discount = 0;
+        let authMode = 'login';
+        let currentUsername = localStorage.getItem('ohmshop_current_user') || null;
+        let orderHistory = JSON.parse(localStorage.getItem('ohmshop_history')) || [];
+
+        function getCurrentUserObj() {
+            if (!currentUsername) return null;
+            const users = getUsersDB();
+            return users.find(u => u.username === currentUsername) || null;
+        }
+
+        function isAdmin() {
+            const user = getCurrentUserObj();
+            return user && user.username === ADMIN_USERNAME && user.role === 'admin';
+        }
+
+        function updateAuthUI() {
+            const authBtn = document.getElementById('auth-btn');
+            const userBadge = document.getElementById('user-badge');
+            const adminNavBtn = document.getElementById('admin-nav-btn');
+            const user = getCurrentUserObj();
+
+            if (user) {
+                authBtn.classList.add('hidden');
+                userBadge.classList.remove('hidden');
+                userBadge.classList.add('flex');
+                document.getElementById('user-display-name').innerText = user.username;
+                document.getElementById('user-credit').innerText = user.credit.toLocaleString();
+
+                // แสดงปุ่มหลังบ้านเฉพาะบัญชี Admin: OHM เท่านั้น
+                if (isAdmin()) {
+                    adminNavBtn.classList.remove('hidden');
+                    adminNavBtn.classList.add('flex');
+                } else {
+                    adminNavBtn.classList.add('hidden');
+                    adminNavBtn.classList.remove('flex');
+                }
+            } else {
+                authBtn.classList.remove('hidden');
+                userBadge.classList.add('hidden');
+                userBadge.classList.remove('flex');
+                adminNavBtn.classList.add('hidden');
+                adminNavBtn.classList.remove('flex');
+            }
+        }
+
+        function openAuthModal(mode = 'login') {
+            switchAuthTab(mode);
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function switchAuthTab(mode) {
+            authMode = mode;
+            const emailField = document.getElementById('email-field');
+            const title = document.getElementById('auth-title');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+
+            if (mode === 'register') {
+                emailField.classList.remove('hidden');
+                title.innerText = 'สมัครสมาชิกใหม่ OHMSHOP';
+                submitBtn.innerText = 'ยืนยันการสมัครสมาชิก';
+                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition';
+                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition';
+            } else {
+                emailField.classList.add('hidden');
+                title.innerText = 'เข้าสู่ระบบ OHMSHOP';
+                submitBtn.innerText = 'เข้าสู่ระบบ';
+                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition';
+                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition';
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
+            const email = document.getElementById('auth-email').value.trim();
+            const users = getUsersDB();
+
+            if (authMode === 'register') {
+                if (username.toUpperCase() === ADMIN_USERNAME) {
+                    alert('ชื่อผู้ใช้นี้ถูกสงวนไว้สำหรับผู้ดูแลระบบ กรุณาใช้ชื่ออื่นครับ');
+                    return;
+                }
+                if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                    alert('ชื่อผู้ใช้นี้มีคนใช้แล้ว กรุณาตั้งชื่ออื่นครับ');
+                    return;
+                }
+                users.push({
+                    username: username,
+                    password: password,
+                    email: email || '-',
+                    credit: 0,
+                    role: 'member'
+                });
+                saveUsersDB(users);
+                currentUsername = username;
+                localStorage.setItem('ohmshop_current_user', currentUsername);
+                updateAuthUI();
+                closeModal('auth-modal');
+                alert(`สมัครสมาชิกสำเร็จ ยินดีต้อนรับคุณ ${username}!`);
+            } else {
+                const found = users.find(u => u.username === username && u.password === password);
+                if (!found) {
+                    alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
+                    return;
+                }
+                currentUsername = found.username;
+                localStorage.setItem('ohmshop_current_user', currentUsername);
+                updateAuthUI();
+                closeModal('auth-modal');
+                if (isAdmin()) {
+                    alert('เข้าสู่ระบบผู้ดูแล (Admin: OHM) สำเร็จ! สามารถกดปุ่ม "👑 หลังบ้าน" ด้านบนเพื่อจัดการเครดิตสมาชิกได้ทันที');
+                } else {
+                    alert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`);
+                }
+            }
+        }
+
+        function logoutUser() {
+            currentUsername = null;
+            localStorage.removeItem('ohmshop_current_user');
+            updateAuthUI();
+        }
+
+        // ฟังก์ชันหลังบ้านสำหรับ Admin: OHM เท่านั้น
+        function openAdminModal() {
+            if (!isAdmin()) {
+                alert('เข้าถึงได้เฉพาะบัญชีผู้ดูแลระบบ (OHM) เท่านั้น!');
+                return;
+            }
+            renderAdminPanel();
+            const modal = document.getElementById('admin-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function renderAdminPanel() {
+            const users = getUsersDB();
+            const select = document.getElementById('admin-user-select');
+            const list = document.getElementById('admin-members-list');
+            document.getElementById('total-members-count').innerText = `${users.length} บัญชี`;
+
+            select.innerHTML = users.map(u => `
+                <option value="${u.username}">${u.username} ${u.role === 'admin' ? '(Admin)' : ''} — คงเหลือ ฿${u.credit.toLocaleString()}</option>
+            `).join('');
+
+            list.innerHTML = users.map(u => `
+                <div class="flex items-center justify-between bg-[#111420] border border-slate-800 rounded-lg px-3 py-2">
+                    <div>
+                        <span class="font-bold text-white">${u.username}</span>
+                        ${u.role === 'admin' ? '<span class="ml-1.5 text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">ADMIN</span>' : ''}
+                        <div class="text-[11px] text-slate-500">รหัสผ่าน: ${u.password}</div>
+                    </div>
+                    <div class="font-eng font-bold text-emerald-400 text-sm">฿${u.credit.toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function adminAdjustCredit(action) {
+            if (!isAdmin()) return;
+            const targetUsername = document.getElementById('admin-user-select').value;
+            const amount = parseFloat(document.getElementById('admin-credit-amount').value);
+
+            if (isNaN(amount) || amount < 0) {
+                alert('กรุณากรอกจำนวนเงินให้ถูกต้องครับ');
+                return;
+            }
+
+            const users = getUsersDB();
+            const idx = users.findIndex(u => u.username === targetUsername);
+            if (idx === -1) return;
+
+            if (action === 'add') {
+                users[idx].credit += amount;
+            } else if (action === 'sub') {
+                users[idx].credit = Math.max(0, users[idx].credit - amount);
+            } else if (action === 'set') {
+                users[idx].credit = amount;
+            }
+
+            saveUsersDB(users);
+            document.getElementById('admin-credit-amount').value = '';
+            renderAdminPanel();
+            updateAuthUI();
+            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! ยอดคงเหลือปัจจุบันคือ ฿${users[idx].credit.toLocaleString()}`);
+        }
 
         function renderCatalog(items) {
             const container = document.getElementById('product-list');
@@ -343,7 +673,6 @@
                 b.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-[#121521] text-slate-300 border border-slate-800 shrink-0';
             });
             btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shrink-0';
-
             const filtered = cat === 'all' ? catalog : catalog.filter(i => i.category === cat);
             renderCatalog(filtered);
         }
@@ -358,9 +687,7 @@
             navigator.clipboard.writeText('OHM50');
             const label = document.getElementById('copy-text');
             label.innerText = 'คัดลอกโค้ด OHM50 แล้ว!';
-            setTimeout(() => {
-                label.innerText = 'คัดลอกโค้ดส่วนลด';
-            }, 2500);
+            setTimeout(() => { label.innerText = 'คัดลอกโค้ดส่วนลด'; }, 2500);
         }
 
         function addToCart(id) {
@@ -416,28 +743,87 @@
             const total = Math.max(0, subtotal - finalDiscount);
             document.getElementById('discount-amount').innerText = '-฿' + finalDiscount;
             document.getElementById('cart-total').innerText = '฿' + total;
+            return total;
         }
 
         function checkout() {
+            const user = getCurrentUserObj();
+            if (!user) {
+                closeModal('cart-modal');
+                alert('กรุณาเข้าสู่ระบบหรือสมัครสมาชิกก่อนสั่งซื้อครับ');
+                openAuthModal('login');
+                return;
+            }
             if (cart.length === 0) {
                 alert('กรุณาเลือกสินค้าใส่ตะกร้าก่อนครับ');
                 return;
             }
-            alert('คำสั่งซื้อ OHMSHOP พร้อมส่งข้อมูลเข้าฐานข้อมูล Supabase ในขั้นตอนถัดไปครับ!');
+            const total = updateCartTotal();
+            if (user.credit < total) {
+                alert(`ยอดเครดิตไม่เพียงพอ (คงเหลือ ฿${user.credit} / ต้องชำระ ฿${total}) กรุณาเติมเครดิตก่อนครับ`);
+                closeModal('cart-modal');
+                openTopupModal();
+                return;
+            }
+
+            const users = getUsersDB();
+            const idx = users.findIndex(u => u.username === user.username);
+            users[idx].credit -= total;
+            saveUsersDB(users);
+            updateAuthUI();
+
+            cart.forEach(item => {
+                orderHistory.unshift({
+                    buyer: user.username,
+                    title: item.title,
+                    date: new Date().toLocaleString('th-TH'),
+                    account: 'เตรียมส่งจากฐานข้อมูล Supabase'
+                });
+            });
+            localStorage.setItem('ohmshop_history', JSON.stringify(orderHistory));
+
             cart = [];
             discount = 0;
             document.getElementById('cart-count').innerText = '0';
             closeModal('cart-modal');
+            alert('สั่งซื้อสำเร็จ! สามารถกดดูรหัสได้ที่ปุ่มประวัติการรับรหัส');
+            openHistoryModal();
         }
 
         function openTopupModal() {
+            if (!getCurrentUserObj()) {
+                openAuthModal('login');
+                return;
+            }
             const modal = document.getElementById('topup-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
 
-        function showHistory() {
-            alert('หน้าประวัติการรับรหัสอัตโนมัติ (พร้อมดึงข้อมูลจาก Supabase เมื่อเชื่อมต่อเสร็จ)');
+        function submitTopup() {
+            alert('แจ้งเติมเงินเรียบร้อย! แอดมินสามารถเข้าไปกดเพิ่มเครดิตให้บัญชีของคุณในระบบหลังบ้านได้ทันที');
+            closeModal('topup-modal');
+        }
+
+        function openHistoryModal() {
+            const list = document.getElementById('history-list');
+            const user = getCurrentUserObj();
+            const userOrders = user ? orderHistory.filter(o => o.buyer === user.username) : [];
+
+            if (userOrders.length === 0) {
+                list.innerHTML = '<div class="text-center text-slate-500 py-6">ยังไม่มีประวัติการสั่งซื้อ</div>';
+            } else {
+                list.innerHTML = userOrders.map(o => `
+                    <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3">
+                        <div class="font-bold text-white">${o.title}</div>
+                        <div class="text-xs text-cyan-400 mt-1">ข้อมูลไอดี: ${o.account}</div>
+                        <div class="text-[11px] text-slate-500 mt-1">${o.date}</div>
+                    </div>
+                `).join('');
+            }
+            const modal = document.getElementById('history-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function closeModal(id) {
@@ -446,6 +832,8 @@
             modal.classList.remove('flex');
         }
 
+        getUsersDB();
+        updateAuthUI();
         renderCatalog(catalog);
     </script>
 </body>
