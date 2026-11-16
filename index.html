@@ -2,18 +2,21 @@
 <html lang="th" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OHMSHOP | ร้านขายรหัส Roblox อัตโนมัติ 24/7</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Kanit', 'Inter', sans-serif;
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            font-family: 'Kanit', sans-serif;
             background-color: #07080d;
             color: #ffffff;
+            -webkit-font-smoothing: antialiased;
         }
         .font-eng {
             font-family: 'Inter', sans-serif;
@@ -24,7 +27,7 @@
             border: 1px solid rgba(56, 189, 248, 0.15);
         }
         .hero-glow {
-            background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.16), rgba(168, 85, 247, 0.12), transparent 70%);
+            background: radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.15), rgba(168, 85, 247, 0.1), transparent 70%);
         }
         .card-hover {
             transition: all 0.25s ease;
@@ -32,78 +35,79 @@
         .card-hover:hover {
             transform: translateY(-4px);
             border-color: rgba(34, 211, 238, 0.5);
-            box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.3);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-cyan-400 selection:text-slate-950">
 
     <!-- Top Navbar -->
-    <nav class="sticky top-0 z-40 bg-[#07080d]/90 backdrop-blur-md border-b border-slate-800/80">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-2.5 shrink-0">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="font-eng font-black text-lg sm:text-xl tracking-wide bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-none">
-                        OHMSHOP
+    <nav class="sticky top-0 z-40 bg-[#07080d]/95 backdrop-blur-md border-b border-slate-800/80 w-full">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 pt-3 pb-2">
+            <div class="flex items-center justify-between gap-2">
+                <a href="#" class="flex items-center gap-2 shrink-0">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        </svg>
                     </div>
-                    <div class="font-eng text-[10px] font-semibold tracking-widest text-slate-400 mt-0.5">
-                        AUTO STORE 24/7
+                    <div>
+                        <div class="font-eng font-extrabold text-base sm:text-xl tracking-wide bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-none">
+                            OHMSHOP
+                        </div>
+                        <div class="font-eng text-[9px] font-semibold tracking-widest text-slate-400 mt-0.5">
+                            AUTO STORE 24/7
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
 
-            <!-- Member, Admin & Cart Actions -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <!-- Admin Panel Button (Visible ONLY when logged in as OHM) -->
-                <button id="admin-nav-btn" onclick="openAdminModal()" class="hidden items-center gap-1 px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition shrink-0">
-                    <span>👑 หลังบ้าน</span>
-                </button>
-
-                <!-- Logged Out Button -->
-                <button id="auth-btn" onclick="openAuthModal('login')" class="px-3 py-1.5 rounded-full bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-semibold transition">
-                    เข้าสู่ระบบ / สมัคร
-                </button>
-
-                <!-- Logged In User Badge -->
-                <div id="user-badge" class="hidden items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-full pl-3 pr-1.5 py-1">
-                    <div class="text-xs">
-                        <span id="user-display-name" class="font-bold text-white">Member</span>
-                        <span class="text-emerald-400 font-eng font-bold ml-1">฿<span id="user-credit">0</span></span>
-                    </div>
-                    <button onclick="openTopupModal()" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold hover:bg-emerald-500/30">
-                        +เติม
+                <div class="flex items-center gap-1.5">
+                    <button id="auth-btn" onclick="openAuthModal('login')" class="px-3 py-1.5 rounded-full bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-medium transition">
+                        เข้าสู่ระบบ / สมัคร
                     </button>
-                    <button onclick="logoutUser()" title="ออกจากระบบ" class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-rose-400 flex items-center justify-center text-xs">
-                        ✕
+
+                    <div id="user-badge" class="hidden items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-full pl-2.5 pr-1 py-1 max-w-[190px] sm:max-w-none">
+                        <div class="text-xs truncate">
+                            <span id="user-display-name" class="font-semibold text-white">Member</span>
+                            <span class="text-emerald-400 font-eng font-bold ml-1">฿<span id="user-credit">0</span></span>
+                        </div>
+                        <button onclick="openTopupModal()" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold shrink-0">
+                            +เติม
+                        </button>
+                        <button onclick="logoutUser()" title="ออกจากระบบ" class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 hover:text-rose-400 flex items-center justify-center text-[10px] shrink-0">
+                            ✕
+                        </button>
+                    </div>
+
+                    <button onclick="openCartModal()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-eng font-bold text-xs shadow-md shadow-cyan-500/20 shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span id="cart-count">0</span>
                     </button>
                 </div>
+            </div>
 
-                <!-- Order History -->
-                <button onclick="openHistoryModal()" title="ประวัติการรับรหัส" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-400/50 flex items-center justify-center text-slate-300 transition shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+            <!-- เมนูหลักบนมือถือ -->
+            <div class="flex items-center gap-2 mt-2.5 overflow-x-auto no-scrollbar pb-0.5">
+                <button onclick="openHistoryModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 border border-purple-500/40 text-purple-300 hover:bg-purple-500/25 text-xs font-medium shrink-0 transition">
+                    <span>📜 ประวัติคำสั่งซื้อ / รับรหัส</span>
                 </button>
-
-                <!-- Cart Button -->
-                <button onclick="openCartModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-eng font-bold text-xs shadow-lg shadow-cyan-500/25 transition shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    <span id="cart-count">0</span>
+                <button onclick="openTopupModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25 text-xs font-medium shrink-0 transition">
+                    <span>💳 เติมเครดิต</span>
+                </button>
+                <button id="admin-nav-btn" onclick="openAdminModal()" class="hidden items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-300 hover:bg-amber-500/30 text-xs font-semibold shrink-0 transition">
+                    <span>👑 จัดการหลังบ้าน</span>
                 </button>
             </div>
-        </div>
 
-        <!-- Search Bar -->
-        <div class="max-w-5xl mx-auto px-4 pb-3">
-            <div class="relative">
+            <div class="relative mt-2">
                 <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
@@ -113,33 +117,33 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="relative hero-glow border-b border-slate-800/60">
-        <div class="max-w-5xl mx-auto px-4 pt-8 pb-10">
-            <div class="glass-card rounded-2xl p-3.5 mb-7 max-w-md">
+    <header class="relative hero-glow border-b border-slate-800/60 w-full">
+        <div class="max-w-5xl mx-auto px-4 pt-7 pb-9">
+            <div class="glass-card rounded-2xl p-3.5 mb-6 max-w-md">
                 <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                    <span class="text-cyan-300 font-medium">โปรโมชั่นเปิดร้านใหม่! ใช้โค้ด</span>
+                    <span class="text-cyan-300 font-normal">โปรโมชั่นเปิดร้านใหม่! ใช้โค้ด</span>
                     <span class="font-eng font-bold bg-purple-600/80 border border-purple-400/40 text-white px-2.5 py-0.5 rounded-md tracking-wider">
                         OHM50
                     </span>
                 </div>
-                <div class="text-xs text-slate-300 mt-1 pl-4">ลดทันที 50 บาท</div>
+                <div class="text-xs text-slate-300 mt-1 pl-4 font-light">ลดทันที 50 บาท</div>
             </div>
 
-            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-4">
-                ศูนย์รวมรหัส <span class="font-eng bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">ROBLOX</span><br>
+            <h1 class="text-3xl sm:text-5xl font-bold tracking-tight leading-snug mb-3">
+                ศูนย์รวมรหัส <span class="font-eng font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">ROBLOX</span><br>
                 ระดับเทพ ราคาคุ้มที่สุด!
             </h1>
 
-            <p class="text-slate-400 text-sm sm:text-base max-w-xl leading-relaxed mb-7">
-                คัดสรรไอดีคุณภาพ ทั้งไก่ตันพร้อมฟาร์ม ผลถาวร เผ่า V4 ตัน และตัวยูนิตแรร์ ระบบจัดส่งรหัสอัตโนมัติทันทีหลังชำระเงิน ไม่ต้องรอแอดมินตอบ
+            <p class="text-slate-400 text-sm sm:text-base font-light max-w-xl leading-relaxed mb-6">
+                คัดสรรไอดีคุณภาพ ทั้งไก่ตันพร้อมฟาร์ม ผลถาวร เผ่า V4 ตัน และตัวยูนิตแรร์ ระบบจัดส่งรหัสอัตโนมัติเข้าเมนูประวัติคำสั่งซื้อทันทีหลังชำระเงิน
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-3 max-w-xs sm:max-w-md mb-9">
-                <a href="#shop-section" class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-cyan-500/25 transition">
+            <div class="flex flex-col sm:flex-row gap-3 max-w-sm sm:max-w-md mb-8">
+                <a href="#shop-section" class="flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-semibold py-3 px-6 rounded-2xl shadow-lg shadow-cyan-500/25 transition">
                     <span>⚡ เลือกซื้อรหัสเลย</span>
                 </a>
-                <button onclick="copyPromoCode()" class="flex items-center justify-center gap-2 bg-[#121521] hover:bg-slate-800 border border-slate-700/80 text-white font-semibold py-3.5 px-6 rounded-2xl transition">
+                <button onclick="copyPromoCode()" class="flex items-center justify-center gap-2 bg-[#121521] hover:bg-slate-800 border border-slate-700/80 text-white font-normal py-3 px-6 rounded-2xl transition">
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                     </svg>
@@ -153,8 +157,8 @@
                         🤖
                     </div>
                     <div>
-                        <div class="font-bold text-sm text-white">ส่งออโต้ 24 ชม.</div>
-                        <div class="text-xs text-slate-400">รับไอดีทันทีใน 3 วิ</div>
+                        <div class="font-semibold text-sm text-white">ส่งออโต้ 24 ชม.</div>
+                        <div class="text-xs text-slate-400 font-light">รับรหัสในหน้าประวัติทันที</div>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 bg-[#10131e] border border-slate-800/80 rounded-2xl p-3.5">
@@ -162,8 +166,8 @@
                         🛡️
                     </div>
                     <div>
-                        <div class="font-bold text-sm text-white">ปลอดภัย 100%</div>
-                        <div class="text-xs text-slate-400">ไอดีสะอาด ไม่ติดเมล</div>
+                        <div class="font-semibold text-sm text-white">ปลอดภัย 100%</div>
+                        <div class="text-xs text-slate-400 font-light">ไอดีสะอาด ไม่ติดเมล</div>
                     </div>
                 </div>
             </div>
@@ -171,37 +175,37 @@
     </header>
 
     <!-- Product Catalog Section -->
-    <main id="shop-section" class="max-w-5xl mx-auto px-4 py-10 w-full flex-grow">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <main id="shop-section" class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h2 class="text-xl sm:text-2xl font-bold text-white">หมวดหมู่สินค้าแนะนำ</h2>
-                <p class="text-xs sm:text-sm text-slate-400">เลือกไอดีที่ต้องการ ระบบจัดส่งรหัสทันทีหลังชำระเงิน</p>
+                <p class="text-xs sm:text-sm text-slate-400 font-light">เลือกไอดีที่ต้องการ ระบบจัดส่งรหัสทันทีหลังชำระเงิน</p>
             </div>
 
-            <div class="flex gap-2 overflow-x-auto pb-1">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 <button onclick="filterCategory('all', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shrink-0">
                     ทั้งหมด
                 </button>
-                <button onclick="filterCategory('farm', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
+                <button onclick="filterCategory('farm', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-normal bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
                     ไก่ตันพร้อมฟาร์ม
                 </button>
-                <button onclick="filterCategory('perm', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
+                <button onclick="filterCategory('perm', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-normal bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
                     ผลถาวร / เผ่า V4
                 </button>
-                <button onclick="filterCategory('unit', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
+                <button onclick="filterCategory('unit', this)" class="cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-normal bg-[#121521] text-slate-300 border border-slate-800 shrink-0">
                     ตัวยูนิตแรร์
                 </button>
             </div>
         </div>
 
-        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-[#06070b] py-7 mt-10">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-slate-400">
+    <footer class="border-t border-slate-800/80 bg-[#06070b] py-6 mt-8 w-full">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 font-light">
             <div class="flex items-center gap-2">
-                <span class="font-eng font-black text-white">OHMSHOP</span>
+                <span class="font-eng font-extrabold text-white">OHMSHOP</span>
                 <span>• ระบบจำหน่ายรหัส Roblox อัตโนมัติ 24/7</span>
             </div>
             <div>© 2026 <span class="font-eng text-cyan-400 font-semibold">OHMSHOP</span>. All rights reserved.</div>
@@ -210,17 +214,17 @@
 
     <!-- Auth Modal (Login / Register) -->
     <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="auth-title" class="text-lg font-bold text-white">เข้าสู่ระบบ OHMSHOP</h3>
                 <button onclick="closeModal('auth-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
 
             <div class="grid grid-cols-2 gap-2 bg-[#080a10] p-1 rounded-xl border border-slate-800 mb-4">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="py-2 rounded-lg text-xs sm:text-sm font-semibold bg-cyan-400 text-slate-950 transition">
                     เข้าสู่ระบบ
                 </button>
-                <button id="tab-register" onclick="switchAuthTab('register')" class="py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition">
+                <button id="tab-register" onclick="switchAuthTab('register')" class="py-2 rounded-lg text-xs sm:text-sm font-normal text-slate-400 hover:text-white transition">
                     สมัครสมาชิกใหม่
                 </button>
             </div>
@@ -238,7 +242,7 @@
                     <label class="block text-xs text-slate-400 mb-1">รหัสผ่าน (Password)</label>
                     <input id="auth-password" type="password" required placeholder="กรอกรหัสผ่าน..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400">
                 </div>
-                <button id="auth-submit-btn" type="submit" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
+                <button id="auth-submit-btn" type="submit" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-semibold text-sm shadow-lg shadow-cyan-500/25 transition">
                     เข้าสู่ระบบ
                 </button>
             </form>
@@ -247,79 +251,119 @@
 
     <!-- Admin Backend Modal (ONLY FOR OHM) -->
     <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="bg-[#111420] border border-amber-500/40 rounded-2xl max-w-lg w-full p-5 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
                 <div class="flex items-center gap-2">
                     <span class="text-xl">👑</span>
                     <div>
-                        <h3 class="text-lg font-bold text-amber-300">ระบบจัดการหลังบ้าน OHMSHOP</h3>
-                        <p class="text-[11px] text-slate-400">เชื่อมต่อฐานข้อมูลออนไลน์ Supabase แบบเรียลไทม์</p>
+                        <h3 class="text-base sm:text-lg font-bold text-amber-300">ระบบจัดการหลังบ้าน OHMSHOP</h3>
+                        <p class="text-[11px] text-slate-400 font-light">จัดการเครดิตสมาชิก & สร้างรหัสจำลองแบบสุ่ม</p>
                     </div>
                 </div>
                 <button onclick="closeModal('admin-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
 
-            <!-- Credit Management Section -->
-            <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4 mb-5">
-                <div class="flex items-center justify-between mb-3">
-                    <h4 class="text-sm font-bold text-cyan-400">💳 ปรับเครดิตสมาชิก (ข้ามเครื่อง)</h4>
-                    <button onclick="renderAdminPanel()" class="text-xs text-amber-300 hover:underline">🔄 รีเฟรชรายชื่อ</button>
+            <!-- 1. ปรับเครดิตสมาชิก -->
+            <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4 mb-4">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h4 class="text-sm font-semibold text-cyan-400">💳 ปรับเครดิตสมาชิก</h4>
+                    <button onclick="renderAdminPanel()" class="text-xs text-amber-300 hover:underline">🔄 รีเฟรช</button>
                 </div>
                 <div class="space-y-2.5">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">เลือกบัญชีสมาชิกที่ต้องการปรับยอด</label>
-                        <select id="admin-user-select" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400"></select>
+                        <label class="block text-xs text-slate-400 mb-1">เลือกบัญชีสมาชิก</label>
+                        <select id="admin-user-select" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400"></select>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">จำนวนเงิน (บาท)</label>
                         <input id="admin-credit-amount" type="number" min="0" placeholder="เช่น 100" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
                     </div>
                     <div class="grid grid-cols-3 gap-2 pt-1">
-                        <button onclick="adminAdjustCredit('add')" class="py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 text-xs font-bold transition">
+                        <button onclick="adminAdjustCredit('add')" class="py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold">
                             + เพิ่มเครดิต
                         </button>
-                        <button onclick="adminAdjustCredit('sub')" class="py-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 hover:bg-rose-500/30 text-xs font-bold transition">
+                        <button onclick="adminAdjustCredit('sub')" class="py-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-semibold">
                             - ลดเครดิต
                         </button>
-                        <button onclick="adminAdjustCredit('set')" class="py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition">
+                        <button onclick="adminAdjustCredit('set')" class="py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold">
                             = ตั้งยอดใหม่
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Member List Overview -->
+            <!-- 2. ระบบสร้างรหัสจำลองแบบสุ่ม (Mock Account Generator) -->
+            <div class="bg-[#080a10] border border-purple-500/30 rounded-xl p-4 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-sm font-semibold text-purple-400">🎲 ระบบสุ่มรหัสจำลอง (สำหรับทดสอบ)</h4>
+                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">DEMO MODE</span>
+                </div>
+                <p class="text-[11px] text-slate-400 font-light mb-3">
+                    สร้างรหัสจำลองแบบสุ่ม (<span class="font-eng">User : Pass</span>) เติมเข้าสต็อกสินค้า หรือกดสุ่มเพื่อทดสอบส่งให้ลูกค้าทันที
+                </p>
+
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">เลือกสินค้าที่ต้องการเติมรหัสจำลอง</label>
+                        <select id="admin-product-select" class="w-full bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-400"></select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input id="admin-stock-input" type="text" placeholder="กดปุ่มสุ่ม หรือพิมพ์รหัสจำลอง..." class="flex-1 bg-[#111420] border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm font-eng text-emerald-300 focus:outline-none focus:border-purple-400">
+                        <button type="button" onclick="fillRandomMockCode()" class="px-3 py-2 rounded-xl bg-purple-600/30 border border-purple-500/50 text-purple-200 hover:bg-purple-600/50 text-xs font-semibold shrink-0">
+                            🎲 สุ่มรหัส
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="adminAddStock()" class="py-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 font-semibold text-xs transition">
+                            + เพิ่มรหัสนี้เข้าสต็อก
+                        </button>
+                        <button onclick="adminGenerateBulkMockStock()" class="py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-xs shadow-md transition">
+                            ⚡ สุ่มเติมสต็อก 10 ชุดรวด
+                        </button>
+                    </div>
+
+                    <!-- รายการรหัสจำลองล่าสุดในสต็อก -->
+                    <div class="pt-2 border-t border-slate-800/80">
+                        <div class="text-[11px] text-slate-400 mb-1.5">ตัวอย่างรหัสจำลองในสต็อกปัจจุบัน:</div>
+                        <div id="admin-mock-preview" class="space-y-1.5 max-h-28 overflow-y-auto text-[11px] font-eng"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. รายชื่อสมาชิกทั้งหมด -->
             <div class="bg-[#080a10] border border-slate-800 rounded-xl p-4">
-                <div class="flex items-center justify-between mb-2.5">
-                    <h4 class="text-sm font-bold text-purple-400">👥 สมาชิกทั้งหมดในฐานข้อมูลออนไลน์</h4>
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-sm font-semibold text-cyan-400">👥 สมาชิกทั้งหมดในระบบ</h4>
                     <span id="total-members-count" class="text-xs text-slate-400">กำลังโหลด...</span>
                 </div>
-                <div id="admin-members-list" class="space-y-2 max-h-48 overflow-y-auto text-xs"></div>
+                <div id="admin-members-list" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
             </div>
         </div>
     </div>
 
     <!-- Cart / Checkout Modal -->
     <div id="cart-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-white">ตะกร้าสินค้า OHMSHOP</h3>
                 <button onclick="closeModal('cart-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
 
-            <div id="cart-items" class="space-y-2.5 max-h-52 overflow-y-auto mb-4 text-sm"></div>
+            <div id="cart-items" class="space-y-2.5 max-h-48 overflow-y-auto mb-4 text-sm"></div>
 
             <div class="flex gap-2 mb-4">
                 <input id="promo-input" type="text" placeholder="ใส่โค้ดส่วนลด (เช่น OHM50)" class="flex-1 bg-[#080a10] border border-slate-700 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-white uppercase focus:outline-none focus:border-cyan-400">
-                <button onclick="applyPromo()" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm font-bold transition">
+                <button onclick="applyPromo()" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm font-semibold transition">
                     ใช้โค้ด
                 </button>
             </div>
 
             <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3.5 mb-5 space-y-1 text-sm">
-                <div class="flex justify-between text-slate-400">
+                <div class="flex justify-between text-slate-400 font-light">
                     <span>ส่วนลดโค้ด</span>
-                    <span id="discount-amount" class="text-emerald-400">-฿0</span>
+                    <span id="discount-amount" class="text-emerald-400 font-normal">-฿0</span>
                 </div>
                 <div class="flex justify-between font-bold text-base pt-1 border-t border-slate-800">
                     <span>ยอดชำระสุทธิ</span>
@@ -327,7 +371,7 @@
                 </div>
             </div>
 
-            <button onclick="checkout()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
+            <button onclick="checkout()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-semibold text-sm shadow-lg shadow-cyan-500/25 transition">
                 ยืนยันสั่งซื้อและรับรหัสทันที
             </button>
         </div>
@@ -335,14 +379,14 @@
 
     <!-- Topup Modal -->
     <div id="topup-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-lg font-bold text-white">เติมเครดิต OHMSHOP</h3>
                 <button onclick="closeModal('topup-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <p class="text-xs sm:text-sm text-slate-400 mb-4">วางลิงก์ซองอั่งเปา TrueMoney Wallet หรือแจ้งสลิปโอนเงิน เพื่อให้แอดมินเพิ่มเครดิตให้บัญชีของคุณ</p>
+            <p class="text-xs sm:text-sm text-slate-400 font-light mb-4">วางลิงก์ซองอั่งเปา TrueMoney Wallet เพื่อให้แอดมินเพิ่มเครดิตให้บัญชีของคุณ</p>
             <input id="topup-link" type="text" placeholder="วางลิงก์ซองอั่งเปา TrueMoney..." class="w-full bg-[#080a10] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white mb-4 focus:outline-none focus:border-cyan-400">
-            <button onclick="submitTopup()" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition">
+            <button onclick="submitTopup()" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-semibold text-sm transition">
                 แจ้งเติมเงิน
             </button>
         </div>
@@ -350,12 +394,15 @@
 
     <!-- History Modal -->
     <div id="history-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg font-bold text-white">ประวัติการรับรหัสอัตโนมัติ</h3>
+        <div class="bg-[#111420] border border-purple-500/40 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold text-white">📜 ประวัติคำสั่งซื้อและรับรหัส</h3>
+                    <p class="text-[11px] text-slate-400 font-light">แสดงรายการที่สั่งซื้อสำเร็จพร้อมข้อมูลไอดีและรหัสผ่าน</p>
+                </div>
                 <button onclick="closeModal('history-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <div id="history-list" class="space-y-2.5 max-h-64 overflow-y-auto text-sm"></div>
+            <div id="history-list" class="space-y-3 max-h-80 overflow-y-auto text-sm"></div>
         </div>
     </div>
 
@@ -373,7 +420,6 @@
                 title: 'ไก่ตัน LV.2550 + หมัด Godhuman',
                 desc: 'เลเวลตันพร้อมฟาร์ม หมัด Godhuman ครบสกิล เงินเบลี 15M+ ไอดีสะอาดไม่ติดเมล เปลี่ยนรหัสได้ทันที',
                 price: 69,
-                stock: 15,
                 gradient: 'from-cyan-500/20 to-blue-600/20 border-cyan-500/30'
             },
             {
@@ -383,7 +429,6 @@
                 title: 'ไอดีเผ่า V4 Full Gear + ผลตื่นครบ',
                 desc: 'เผ่า V4 อัปเกียร์เต็มขั้นพร้อมลง PvP ระดับเทพ มีดาบคู่ CDK และ Soul Guitar ครบเซ็ต',
                 price: 249,
-                stock: 4,
                 gradient: 'from-purple-500/20 to-pink-600/20 border-purple-500/30'
             },
             {
@@ -393,7 +438,6 @@
                 title: 'ไอดีผล Kitsune ถาวร + เลเวลตัน',
                 desc: 'มีผล Kitsune ถาวรติดตัวพร้อมใช้งาน ไม่ติดเมล ไม่ติดเบอร์ รับประกันความปลอดภัย 100%',
                 price: 390,
-                stock: 2,
                 gradient: 'from-blue-500/20 to-indigo-600/20 border-blue-500/30'
             },
             {
@@ -403,7 +447,6 @@
                 title: 'ไอดีตัวยูนิต Secret / Mythic แรร์',
                 desc: 'รวมตัวยูนิตแรร์หายากพร้อมลงด่านระดับสูง สเตตัสตึงๆ พร้อมเพชรสุ่มในตัวอีกเพียบ',
                 price: 159,
-                stock: 7,
                 gradient: 'from-emerald-500/20 to-teal-600/20 border-emerald-500/30'
             },
             {
@@ -413,7 +456,6 @@
                 title: 'ไก่ตันงบประหยัด เลเวล 2550 + ผลสุ่ม',
                 desc: 'เหมาะสำหรับคนงบน้อย แต่อยากได้ไอดีเลเวลตันพร้อมเล่นทันที การันตีเงินเบลี 5M+',
                 price: 39,
-                stock: 24,
                 gradient: 'from-amber-500/20 to-orange-600/20 border-amber-500/30'
             },
             {
@@ -423,7 +465,6 @@
                 title: 'สุ่มรหัสเทพ การันตีผลถาวร / ยูนิตแรร์',
                 desc: 'ลุ้นรับไอดีระดับเทพในราคาเบาๆ การันตีได้ไอดีเลเวลสูงหรือตัวยูนิตแรร์ทุกกล่อง ไม่เกลือแน่นอน',
                 price: 59,
-                stock: 19,
                 gradient: 'from-fuchsia-500/20 to-purple-600/20 border-fuchsia-500/30'
             }
         ];
@@ -434,6 +475,33 @@
         let discount = 0;
         let authMode = 'login';
         let currentUser = null;
+        let stockCounts = {};
+
+        // ฟังก์ชันสร้างรหัสจำลองแบบสุ่ม (User : Pass)
+        function generateRandomMockAccount(productId = 1) {
+            const prefixes = {
+                1: ['GodhumanTH', 'BloxFarm2550', 'OhmKaiTan', 'ProFarmRBX'],
+                2: ['V4FullGear', 'CyborgV4Max', 'SharkV4God', 'AngelV4VIP'],
+                3: ['KitsunePerm', 'DragonMythic', 'LeopardPerm', 'DoughKing'],
+                4: ['SecretUnit', 'MythicAnime', 'GodUnitRBX', 'UltraRare99'],
+                5: ['Starter2550', 'BudgetBlox', 'NewbieMax', 'MiniFarm'],
+                6: ['MysteryVIP', 'LuckyBoxTH', 'OhmRandom', 'JackpotRBX']
+            };
+            const list = prefixes[productId] || ['OhmShopDemo'];
+            const prefix = list[Math.floor(Math.random() * list.length)];
+            const randNum = Math.floor(1000 + Math.random() * 9000);
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let passSuffix = '';
+            for (let i = 0; i < 6; i++) {
+                passSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return `${prefix}_${randNum} : Mock#${passSuffix}`;
+        }
+
+        function fillRandomMockCode() {
+            const productId = parseInt(document.getElementById('admin-product-select').value) || 1;
+            document.getElementById('admin-stock-input').value = generateRandomMockAccount(productId);
+        }
 
         async function initApp() {
             const savedUsername = localStorage.getItem('ohmshop_current_user');
@@ -441,7 +509,18 @@
                 await refreshCurrentUser(savedUsername);
             }
             updateAuthUI();
+            await loadStockCounts();
             renderCatalog(catalog);
+        }
+
+        async function loadStockCounts() {
+            const { data } = await db.from('ohmshop_stock').select('product_id').eq('is_sold', false);
+            stockCounts = {};
+            if (data) {
+                data.forEach(row => {
+                    stockCounts[row.product_id] = (stockCounts[row.product_id] || 0) + 1;
+                });
+            }
         }
 
         async function refreshCurrentUser(username) {
@@ -500,14 +579,14 @@
                 emailField.classList.remove('hidden');
                 title.innerText = 'สมัครสมาชิกใหม่ OHMSHOP';
                 submitBtn.innerText = 'ยืนยันการสมัครสมาชิก';
-                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition';
-                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition';
+                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold bg-cyan-400 text-slate-950 transition';
+                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-normal text-slate-400 hover:text-white transition';
             } else {
                 emailField.classList.add('hidden');
                 title.innerText = 'เข้าสู่ระบบ OHMSHOP';
                 submitBtn.innerText = 'เข้าสู่ระบบ';
-                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 transition';
-                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition';
+                tabLogin.className = 'py-2 rounded-lg text-xs sm:text-sm font-semibold bg-cyan-400 text-slate-950 transition';
+                tabRegister.className = 'py-2 rounded-lg text-xs sm:text-sm font-normal text-slate-400 hover:text-white transition';
             }
         }
 
@@ -533,7 +612,7 @@
                 ]).select().single();
 
                 if (error) {
-                    alert('เกิดข้อผิดพลาดในการสมัครสมาชิก: ' + error.message);
+                    alert('เกิดข้อผิดพลาด: ' + error.message);
                     return;
                 }
 
@@ -558,11 +637,7 @@
                 localStorage.setItem('ohmshop_current_user', currentUser.username);
                 updateAuthUI();
                 closeModal('auth-modal');
-                if (isAdmin()) {
-                    alert('เข้าสู่ระบบผู้ดูแล (Admin: OHM) สำเร็จ! กดปุ่ม "👑 หลังบ้าน" ด้านบนเพื่อจัดการเครดิตสมาชิกได้เลย');
-                } else {
-                    alert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`);
-                }
+                alert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`);
             }
         }
 
@@ -577,6 +652,10 @@
                 alert('เข้าถึงได้เฉพาะบัญชีผู้ดูแลระบบ (OHM) เท่านั้น!');
                 return;
             }
+            const prodSelect = document.getElementById('admin-product-select');
+            prodSelect.innerHTML = catalog.map(p => `<option value="${p.id}">[${p.id}] ${p.title}</option>`).join('');
+            fillRandomMockCode();
+
             const modal = document.getElementById('admin-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -586,30 +665,45 @@
         async function renderAdminPanel() {
             const select = document.getElementById('admin-user-select');
             const list = document.getElementById('admin-members-list');
+            const mockPreview = document.getElementById('admin-mock-preview');
             document.getElementById('total-members-count').innerText = 'กำลังโหลด...';
 
-            const { data: users, error } = await db.from('ohmshop_users').select('*').order('id', { ascending: false });
-            if (error || !users) {
-                document.getElementById('total-members-count').innerText = 'โหลดไม่สำเร็จ';
-                return;
+            const { data: users } = await db.from('ohmshop_users').select('*').order('id', { ascending: false });
+            if (users) {
+                document.getElementById('total-members-count').innerText = `${users.length} บัญชี`;
+                select.innerHTML = users.map(u => `
+                    <option value="${u.username}">${u.username} ${u.role === 'admin' ? '(Admin)' : ''} — คงเหลือ ฿${Number(u.credit).toLocaleString()}</option>
+                `).join('');
+
+                list.innerHTML = users.map(u => `
+                    <div class="flex items-center justify-between bg-[#111420] border border-slate-800 rounded-lg px-3 py-2">
+                        <div>
+                            <span class="font-semibold text-white">${u.username}</span>
+                            ${u.role === 'admin' ? '<span class="ml-1.5 text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">ADMIN</span>' : ''}
+                            <div class="text-[11px] text-slate-500">รหัสผ่าน: ${u.password}</div>
+                        </div>
+                        <div class="font-eng font-bold text-emerald-400 text-sm">฿${Number(u.credit).toLocaleString()}</div>
+                    </div>
+                `).join('');
             }
 
-            document.getElementById('total-members-count').innerText = `${users.length} บัญชี`;
+            // โหลดตัวอย่างรหัสจำลองในสต็อก
+            const { data: stocks } = await db.from('ohmshop_stock')
+                .select('*')
+                .eq('is_sold', false)
+                .order('id', { ascending: false })
+                .limit(10);
 
-            select.innerHTML = users.map(u => `
-                <option value="${u.username}">${u.username} ${u.role === 'admin' ? '(Admin)' : ''} — คงเหลือ ฿${Number(u.credit).toLocaleString()}</option>
-            `).join('');
-
-            list.innerHTML = users.map(u => `
-                <div class="flex items-center justify-between bg-[#111420] border border-slate-800 rounded-lg px-3 py-2">
-                    <div>
-                        <span class="font-bold text-white">${u.username}</span>
-                        ${u.role === 'admin' ? '<span class="ml-1.5 text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">ADMIN</span>' : ''}
-                        <div class="text-[11px] text-slate-500">รหัสผ่าน: ${u.password}</div>
+            if (!stocks || stocks.length === 0) {
+                mockPreview.innerHTML = '<div class="text-slate-500">ยังไม่มีรหัสจำลองในสต็อก (กดปุ่มสุ่มเติมสต็อกได้เลย)</div>';
+            } else {
+                mockPreview.innerHTML = stocks.map(s => `
+                    <div class="flex items-center justify-between bg-[#111420] border border-slate-800/80 rounded px-2.5 py-1.5 text-emerald-300">
+                        <span class="truncate">[สินค้า #${s.product_id}] ${s.account_data}</span>
+                        <button onclick="copyText('${s.account_data.replace(/'/g, "\\'")}')" class="text-[10px] text-cyan-400 ml-2 shrink-0">คัดลอก</button>
                     </div>
-                    <div class="font-eng font-bold text-emerald-400 text-sm">฿${Number(u.credit).toLocaleString()}</div>
-                </div>
-            `).join('');
+                `).join('');
+            }
         }
 
         async function adminAdjustCredit(action) {
@@ -630,17 +724,62 @@
             else if (action === 'sub') newCredit = Math.max(0, newCredit - amount);
             else if (action === 'set') newCredit = amount;
 
-            const { error } = await db.from('ohmshop_users').update({ credit: newCredit }).eq('username', targetUsername);
-            if (error) {
-                alert('อัปเดตเครดิตไม่สำเร็จ: ' + error.message);
-                return;
-            }
+            await db.from('ohmshop_users').update({ credit: newCredit }).eq('username', targetUsername);
 
             document.getElementById('admin-credit-amount').value = '';
             await refreshCurrentUser(currentUser.username);
             updateAuthUI();
             await renderAdminPanel();
-            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! ยอดคงเหลือปัจจุบันคือ ฿${newCredit.toLocaleString()}`);
+            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! คงเหลือ ฿${newCredit.toLocaleString()}`);
+        }
+
+        async function adminAddStock() {
+            if (!isAdmin()) return;
+            const productId = parseInt(document.getElementById('admin-product-select').value);
+            const accountData = document.getElementById('admin-stock-input').value.trim();
+
+            if (!accountData) {
+                alert('กรุณากดปุ่มสุ่มรหัส หรือพิมพ์รหัสจำลองก่อนครับ');
+                return;
+            }
+
+            const { error } = await db.from('ohmshop_stock').insert([
+                { product_id: productId, account_data: accountData, is_sold: false }
+            ]);
+
+            if (error) {
+                alert('เพิ่มรหัสไม่สำเร็จ: ' + error.message);
+                return;
+            }
+
+            fillRandomMockCode();
+            await loadStockCounts();
+            renderCatalog(catalog);
+            await renderAdminPanel();
+            alert('เพิ่มรหัสจำลองเข้าสต็อกสำเร็จ!');
+        }
+
+        async function adminGenerateBulkMockStock() {
+            if (!isAdmin()) return;
+            const rows = [];
+            for (const item of catalog) {
+                for (let i = 0; i < 2; i++) {
+                    rows.push({
+                        product_id: item.id,
+                        account_data: generateRandomMockAccount(item.id),
+                        is_sold: false
+                    });
+                }
+            }
+            const { error } = await db.from('ohmshop_stock').insert(rows);
+            if (error) {
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+                return;
+            }
+            await loadStockCounts();
+            renderCatalog(catalog);
+            await renderAdminPanel();
+            alert('สุ่มสร้างรหัสจำลอง 12 ชุด เติมเข้าสต็อกทุกสินค้าเรียบร้อย!');
         }
 
         function renderCatalog(items) {
@@ -648,23 +787,25 @@
             container.innerHTML = '';
 
             items.forEach(item => {
+                const count = stockCounts[item.id] || 0;
+                const displayStock = count > 0 ? count : 'พร้อมส่ง (สุ่มจำลอง)';
                 const el = document.createElement('div');
-                el.className = 'bg-[#10131e] border border-slate-800/90 rounded-2xl p-5 flex flex-col justify-between card-hover';
+                el.className = 'bg-[#10131e] border border-slate-800/90 rounded-2xl p-4 sm:p-5 flex flex-col justify-between card-hover';
                 el.innerHTML = `
                     <div>
-                        <div class="rounded-xl bg-gradient-to-r ${item.gradient} border p-4 mb-4 flex items-center justify-between">
-                            <span class="text-xs font-semibold text-white bg-slate-950/70 px-2.5 py-1 rounded-lg">${item.badge}</span>
+                        <div class="rounded-xl bg-gradient-to-r ${item.gradient} border p-3.5 mb-3.5 flex items-center justify-between">
+                            <span class="text-xs font-medium text-white bg-slate-950/70 px-2.5 py-1 rounded-lg">${item.badge}</span>
                             <span class="font-eng text-xs font-bold text-cyan-300">OHMSHOP</span>
                         </div>
-                        <h3 class="text-base sm:text-lg font-bold text-white mb-2">${item.title}</h3>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">${item.desc}</p>
+                        <h3 class="text-base sm:text-lg font-semibold text-white mb-1.5">${item.title}</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 font-light leading-relaxed mb-4">${item.desc}</p>
                     </div>
                     <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
                         <div>
-                            <div class="text-[11px] text-slate-400">คงเหลือ <span class="text-emerald-400 font-bold">${item.stock}</span> ไอดี</div>
+                            <div class="text-[11px] text-slate-400 font-light">สถานะ: <span class="text-emerald-400 font-semibold">${count > 0 ? 'คงเหลือ ' + count + ' ไอดี' : displayStock}</span></div>
                             <div class="font-eng text-xl font-extrabold text-cyan-400">฿${item.price}</div>
                         </div>
-                        <button onclick="addToCart(${item.id})" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition">
+                        <button onclick="addToCart(${item.id})" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-semibold text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition">
                             + ใส่ตะกร้า
                         </button>
                     </div>
@@ -675,7 +816,7 @@
 
         function filterCategory(cat, btn) {
             document.querySelectorAll('.cat-btn').forEach(b => {
-                b.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-[#121521] text-slate-300 border border-slate-800 shrink-0';
+                b.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-normal bg-[#121521] text-slate-300 border border-slate-800 shrink-0';
             });
             btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shrink-0';
             const filtered = cat === 'all' ? catalog : catalog.filter(i => i.category === cat);
@@ -695,6 +836,11 @@
             setTimeout(() => { label.innerText = 'คัดลอกโค้ดส่วนลด'; }, 2500);
         }
 
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert('คัดลอกรหัสเรียบร้อย: ' + text);
+        }
+
         function addToCart(id) {
             const item = catalog.find(i => i.id === id);
             if (!item) return;
@@ -706,11 +852,11 @@
         function openCartModal() {
             const list = document.getElementById('cart-items');
             if (cart.length === 0) {
-                list.innerHTML = '<div class="text-center text-slate-500 py-6">ยังไม่มีสินค้าในตะกร้า</div>';
+                list.innerHTML = '<div class="text-center text-slate-500 py-6 font-light">ยังไม่มีสินค้าในตะกร้า</div>';
             } else {
                 list.innerHTML = cart.map((item, idx) => `
                     <div class="flex items-center justify-between bg-[#080a10] border border-slate-800 rounded-xl px-3.5 py-2.5">
-                        <span class="text-slate-200 truncate pr-2">${item.title}</span>
+                        <span class="text-slate-200 truncate pr-2 text-xs sm:text-sm">${item.title}</span>
                         <div class="flex items-center gap-3 shrink-0">
                             <span class="font-eng font-bold text-cyan-400">฿${item.price}</span>
                             <button onclick="removeFromCart(${idx})" class="text-rose-400 text-xs">ลบ</button>
@@ -774,24 +920,45 @@
                 return;
             }
 
+            // ดึงรหัสจำลองจากสต็อก หรือสุ่มรหัสจำลองใหม่ให้ทันที
+            const orderRows = [];
+            for (const item of cart) {
+                const { data: stockItem } = await db.from('ohmshop_stock')
+                    .select('*')
+                    .eq('product_id', item.id)
+                    .eq('is_sold', false)
+                    .limit(1)
+                    .single();
+
+                let deliveredAccount = '';
+                if (stockItem) {
+                    deliveredAccount = stockItem.account_data;
+                    await db.from('ohmshop_stock').update({ is_sold: true }).eq('id', stockItem.id);
+                } else {
+                    deliveredAccount = generateRandomMockAccount(item.id);
+                }
+
+                orderRows.push({
+                    buyer: currentUser.username,
+                    title: `${item.title} (ราคา ฿${item.price})`,
+                    account: deliveredAccount
+                });
+            }
+
             const newCredit = Number(currentUser.credit) - total;
             await db.from('ohmshop_users').update({ credit: newCredit }).eq('username', currentUser.username);
-
-            const orderRows = cart.map(item => ({
-                buyer: currentUser.username,
-                title: item.title,
-                account: 'รอแอดมิน/ระบบส่งรหัสเข้าประวัติ'
-            }));
             await db.from('ohmshop_orders').insert(orderRows);
 
             await refreshCurrentUser(currentUser.username);
+            await loadStockCounts();
             updateAuthUI();
+            renderCatalog(catalog);
 
             cart = [];
             discount = 0;
             document.getElementById('cart-count').innerText = '0';
             closeModal('cart-modal');
-            alert('สั่งซื้อสำเร็จ! สามารถกดดูรหัสได้ที่ปุ่มประวัติการรับรหัส');
+            alert('สั่งซื้อสำเร็จ! ระบบส่งรหัสจำลองเข้าเมนู "ประวัติคำสั่งซื้อ" เรียบร้อยแล้ว');
             openHistoryModal();
         }
 
@@ -817,21 +984,35 @@
             modal.classList.add('flex');
 
             if (!currentUser) {
-                list.innerHTML = '<div class="text-center text-slate-500 py-6">กรุณาเข้าสู่ระบบเพื่อดูประวัติการสั่งซื้อ</div>';
+                list.innerHTML = '<div class="text-center text-slate-500 py-6 font-light">กรุณาเข้าสู่ระบบเพื่อดูประวัติคำสั่งซื้อ</div>';
                 return;
             }
 
-            list.innerHTML = '<div class="text-center text-slate-400 py-6">กำลังโหลดประวัติ...</div>';
-            const { data: orders } = await db.from('ohmshop_orders').select('*').eq('buyer', currentUser.username).order('id', { ascending: false });
+            list.innerHTML = '<div class="text-center text-slate-400 py-6 font-light">กำลังโหลดประวัติคำสั่งซื้อ...</div>';
+            const { data: orders } = await db.from('ohmshop_orders')
+                .select('*')
+                .eq('buyer', currentUser.username)
+                .order('id', { ascending: false });
 
             if (!orders || orders.length === 0) {
-                list.innerHTML = '<div class="text-center text-slate-500 py-6">ยังไม่มีประวัติการสั่งซื้อ</div>';
+                list.innerHTML = '<div class="text-center text-slate-500 py-6 font-light">ยังไม่มีประวัติคำสั่งซื้อ</div>';
             } else {
                 list.innerHTML = orders.map(o => `
-                    <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3">
-                        <div class="font-bold text-white">${o.title}</div>
-                        <div class="text-xs text-cyan-400 mt-1">ข้อมูลไอดี: ${o.account}</div>
-                        <div class="text-[11px] text-slate-500 mt-1">${new Date(o.created_at).toLocaleString('th-TH')}</div>
+                    <div class="bg-[#080a10] border border-slate-800 rounded-xl p-3.5 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-cyan-400 font-semibold">คำสั่งซื้อ #${o.id}</span>
+                            <span class="text-[11px] text-slate-500">${new Date(o.created_at).toLocaleString('th-TH')}</span>
+                        </div>
+                        <div class="text-xs sm:text-sm font-semibold text-white">📦 รายการที่ซื้อ: ${o.title}</div>
+                        <div class="bg-[#111420] border border-emerald-500/30 rounded-lg p-2.5 flex items-center justify-between gap-2">
+                            <div class="truncate">
+                                <div class="text-[10px] text-slate-400">รหัสจำลองที่ได้รับ (User : Pass)</div>
+                                <div class="font-eng text-xs sm:text-sm font-bold text-emerald-400 select-all">${o.account}</div>
+                            </div>
+                            <button onclick="copyText('${o.account.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold shrink-0">
+                                คัดลอก
+                            </button>
+                        </div>
                     </div>
                 `).join('');
             }
