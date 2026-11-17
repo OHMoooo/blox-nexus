@@ -212,9 +212,28 @@
         </div>
     </footer>
 
+    <!-- Custom Dark Theme Alert Modal (แทนที่กรอบสีขาวของเบราว์เซอร์ทั้งหมด) -->
+    <div id="custom-alert-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-[#111420] border border-cyan-500/40 rounded-2xl max-w-sm w-full p-5 shadow-2xl shadow-cyan-500/10 animate-pop">
+            <div class="flex items-center gap-3 mb-3">
+                <div id="custom-alert-icon" class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-xl shrink-0">
+                    ✨
+                </div>
+                <div>
+                    <div class="font-eng text-[10px] font-bold tracking-widest text-cyan-400">OHMSHOP SYSTEM</div>
+                    <h4 id="custom-alert-title" class="text-base font-bold text-white">แจ้งเตือนจากระบบ</h4>
+                </div>
+            </div>
+            <p id="custom-alert-msg" class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-5 bg-[#080a10] border border-slate-800/90 rounded-xl p-3.5"></p>
+            <button id="custom-alert-btn" onclick="closeCustomAlert()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-semibold text-sm shadow-lg shadow-cyan-500/20 transition">
+                ตกลง
+            </button>
+        </div>
+    </div>
+
     <!-- Auth Modal (Login / Register) -->
     <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl animate-pop">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="auth-title" class="text-lg font-bold text-white">เข้าสู่ระบบ OHMSHOP</h3>
                 <button onclick="closeModal('auth-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
@@ -251,7 +270,7 @@
 
     <!-- Admin Backend Modal (ONLY FOR OHM) -->
     <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-amber-500/40 rounded-2xl max-w-lg w-full p-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="bg-[#111420] border border-amber-500/40 rounded-2xl max-w-lg w-full p-5 shadow-2xl max-h-[90vh] overflow-y-auto animate-pop">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
                 <div class="flex items-center gap-2">
                     <span class="text-xl">👑</span>
@@ -292,14 +311,15 @@
                 </div>
             </div>
 
-            <!-- 2. ระบบสร้างรหัสจำลองแบบสุ่ม (Mock Account Generator) -->
+            <!-- 2. ระบบสร้างรหัสจำลองแบบสุ่ม -->
             <div class="bg-[#080a10] border border-purple-500/30 rounded-xl p-4 mb-4">
                 <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-sm font-semibold text-purple-400">🎲 ระบบสุ่มรหัสจำลอง (สำหรับทดสอบ)</h4>
-                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">DEMO MODE</span>
+                    <h4 class="text-sm font-semibold text-purple-400">🎲 ระบบสุ่มรหัสจำลอง</h4>
+                    <!-- เอาคำว่า DEMO MODE ออก -->
                 </div>
                 <p class="text-[11px] text-slate-400 font-light mb-3">
-                    สร้างรหัสจำลองแบบสุ่ม (<span class="font-eng">User : Pass</span>) เติมเข้าสต็อกสินค้า หรือกดสุ่มเพื่อทดสอบส่งให้ลูกค้าทันที
+                    สร้างรหัสแบบสุ่ม เติมเข้าสต็อกสินค้า หรือกดสุ่มเพื่อทดสอบส่งให้ลูกค้าทันที
+                    <!-- เอา ("User : Pass") ออก -->
                 </p>
 
                 <div class="space-y-2.5">
@@ -320,11 +340,10 @@
                             + เพิ่มรหัสนี้เข้าสต็อก
                         </button>
                         <button onclick="adminGenerateBulkMockStock()" class="py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-xs shadow-md transition">
-                            ⚡ สุ่มเติมสต็อก 10 ชุดรวด
+                            ⚡ สุ่มเติมสต็อก 12 ชุดรวด
                         </button>
                     </div>
 
-                    <!-- รายการรหัสจำลองล่าสุดในสต็อก -->
                     <div class="pt-2 border-t border-slate-800/80">
                         <div class="text-[11px] text-slate-400 mb-1.5">ตัวอย่างรหัสจำลองในสต็อกปัจจุบัน:</div>
                         <div id="admin-mock-preview" class="space-y-1.5 max-h-28 overflow-y-auto text-[11px] font-eng"></div>
@@ -345,7 +364,7 @@
 
     <!-- Cart / Checkout Modal -->
     <div id="cart-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl animate-pop">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-white">ตะกร้าสินค้า OHMSHOP</h3>
                 <button onclick="closeModal('cart-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
@@ -379,7 +398,7 @@
 
     <!-- Topup Modal -->
     <div id="topup-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+        <div class="bg-[#111420] border border-slate-700/80 rounded-2xl max-w-md w-full p-5 shadow-2xl animate-pop">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-lg font-bold text-white">เติมเครดิต OHMSHOP</h3>
                 <button onclick="closeModal('topup-modal')" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
@@ -394,7 +413,7 @@
 
     <!-- History Modal -->
     <div id="history-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-[#111420] border border-purple-500/40 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+        <div class="bg-[#111420] border border-purple-500/40 rounded-2xl max-w-md w-full p-5 shadow-2xl animate-pop">
             <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
                 <div>
                     <h3 class="text-base sm:text-lg font-bold text-white">📜 ประวัติคำสั่งซื้อและรับรหัส</h3>
@@ -411,6 +430,28 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_jc1xx57GMPs7YdRkQL8_cQ_MqhFsNu-';
 
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let customAlertCallback = null;
+        function showDarkAlert(message, title = 'แจ้งเตือนจากระบบ', icon = '✨', callback = null) {
+            document.getElementById('custom-alert-title').innerText = title;
+            document.getElementById('custom-alert-msg').innerText = message;
+            document.getElementById('custom-alert-icon').innerText = icon;
+            customAlertCallback = callback;
+            const modal = document.getElementById('custom-alert-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('custom-alert-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            if (typeof customAlertCallback === 'function') {
+                const cb = customAlertCallback;
+                customAlertCallback = null;
+                cb();
+            }
+        }
 
         const catalog = [
             {
@@ -477,7 +518,6 @@
         let currentUser = null;
         let stockCounts = {};
 
-        // ฟังก์ชันสร้างรหัสจำลองแบบสุ่ม (User : Pass)
         function generateRandomMockAccount(productId = 1) {
             const prefixes = {
                 1: ['GodhumanTH', 'BloxFarm2550', 'OhmKaiTan', 'ProFarmRBX'],
@@ -554,9 +594,9 @@
             } else {
                 authBtn.classList.remove('hidden');
                 userBadge.classList.add('hidden');
-                userBadge.classList.remove('flex');
+                userBadge.remove('flex');
                 adminNavBtn.classList.add('hidden');
-                adminNavBtn.classList.remove('flex');
+                adminNavBtn.remove('flex');
             }
         }
 
@@ -598,12 +638,12 @@
 
             if (authMode === 'register') {
                 if (username.toUpperCase() === ADMIN_USERNAME) {
-                    alert('ชื่อผู้ใช้นี้ถูกสงวนไว้สำหรับผู้ดูแลระบบ กรุณาใช้ชื่ออื่นครับ');
+                    showDarkAlert('ชื่อผู้ใช้นี้ถูกสงวนไว้สำหรับผู้ดูแลระบบ กรุณาใช้ชื่ออื่นครับ', 'ไม่สามารถใช้ชื่อนี้ได้', '⚠️');
                     return;
                 }
                 const { data: existing } = await db.from('ohmshop_users').select('username').ilike('username', username);
                 if (existing && existing.length > 0) {
-                    alert('ชื่อผู้ใช้นี้มีคนใช้แล้ว กรุณาตั้งชื่ออื่นครับ');
+                    showDarkAlert('ชื่อผู้ใช้นี้มีคนใช้แล้ว กรุณาตั้งชื่ออื่นครับ', 'ชื่อผู้ใช้ซ้ำ', '⚠️');
                     return;
                 }
 
@@ -612,7 +652,7 @@
                 ]).select().single();
 
                 if (error) {
-                    alert('เกิดข้อผิดพลาด: ' + error.message);
+                    showDarkAlert('เกิดข้อผิดพลาด: ' + error.message, 'สมัครไม่สำเร็จ', '❌');
                     return;
                 }
 
@@ -620,7 +660,7 @@
                 localStorage.setItem('ohmshop_current_user', currentUser.username);
                 updateAuthUI();
                 closeModal('auth-modal');
-                alert(`สมัครสมาชิกสำเร็จ ยินดีต้อนรับคุณ ${username}!`);
+                showDarkAlert(`สมัครสมาชิกสำเร็จ ยินดีต้อนรับคุณ ${username}!`, 'สมัครสมาชิกสำเร็จ', '🎉');
             } else {
                 const { data: found } = await db.from('ohmshop_users')
                     .select('*')
@@ -629,7 +669,7 @@
                     .single();
 
                 if (!found) {
-                    alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
+                    showDarkAlert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง', 'เข้าสู่ระบบไม่สำเร็จ', '❌');
                     return;
                 }
 
@@ -637,7 +677,7 @@
                 localStorage.setItem('ohmshop_current_user', currentUser.username);
                 updateAuthUI();
                 closeModal('auth-modal');
-                alert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`);
+                showDarkAlert(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${found.username}!`, 'เข้าสู่ระบบสำเร็จ', '✅');
             }
         }
 
@@ -645,11 +685,12 @@
             currentUser = null;
             localStorage.removeItem('ohmshop_current_user');
             updateAuthUI();
+            showDarkAlert('ออกจากระบบเรียบร้อยแล้ว', 'ออกจากระบบ', '👋');
         }
 
         async function openAdminModal() {
             if (!isAdmin()) {
-                alert('เข้าถึงได้เฉพาะบัญชีผู้ดูแลระบบ (OHM) เท่านั้น!');
+                showDarkAlert('เข้าถึงได้เฉพาะบัญชีผู้ดูแลระบบ (OHM) เท่านั้น!', 'จำกัดสิทธิ์การเข้าถึง', '🔒');
                 return;
             }
             const prodSelect = document.getElementById('admin-product-select');
@@ -687,7 +728,6 @@
                 `).join('');
             }
 
-            // โหลดตัวอย่างรหัสจำลองในสต็อก
             const { data: stocks } = await db.from('ohmshop_stock')
                 .select('*')
                 .eq('is_sold', false)
@@ -712,7 +752,7 @@
             const amount = parseFloat(document.getElementById('admin-credit-amount').value);
 
             if (isNaN(amount) || amount < 0) {
-                alert('กรุณากรอกจำนวนเงินให้ถูกต้องครับ');
+                showDarkAlert('กรุณากรอกจำนวนเงินให้ถูกต้องครับ', 'ข้อมูลไม่ถูกต้อง', '⚠️');
                 return;
             }
 
@@ -730,65 +770,13 @@
             await refreshCurrentUser(currentUser.username);
             updateAuthUI();
             await renderAdminPanel();
-            alert(`อัปเดตเครดิตของ "${targetUsername}" เรียบร้อย! คงเหลือ ฿${newCredit.toLocaleString()}`);
-        }
-
-        async function adminAddStock() {
-            if (!isAdmin()) return;
-            const productId = parseInt(document.getElementById('admin-product-select').value);
-            const accountData = document.getElementById('admin-stock-input').value.trim();
-
-            if (!accountData) {
-                alert('กรุณากดปุ่มสุ่มรหัส หรือพิมพ์รหัสจำลองก่อนครับ');
-                return;
-            }
-
-            const { error } = await db.from('ohmshop_stock').insert([
-                { product_id: productId, account_data: accountData, is_sold: false }
-            ]);
-
-            if (error) {
-                alert('เพิ่มรหัสไม่สำเร็จ: ' + error.message);
-                return;
-            }
-
-            fillRandomMockCode();
-            await loadStockCounts();
-            renderCatalog(catalog);
-            await renderAdminPanel();
-            alert('เพิ่มรหัสจำลองเข้าสต็อกสำเร็จ!');
-        }
-
-        async function adminGenerateBulkMockStock() {
-            if (!isAdmin()) return;
-            const rows = [];
-            for (const item of catalog) {
-                for (let i = 0; i < 2; i++) {
-                    rows.push({
-                        product_id: item.id,
-                        account_data: generateRandomMockAccount(item.id),
-                        is_sold: false
-                    });
-                }
-            }
-            const { error } = await db.from('ohmshop_stock').insert(rows);
-            if (error) {
-                alert('เกิดข้อผิดพลาด: ' + error.message);
-                return;
-            }
-            await loadStockCounts();
-            renderCatalog(catalog);
-            await renderAdminPanel();
-            alert('สุ่มสร้างรหัสจำลอง 12 ชุด เติมเข้าสต็อกทุกสินค้าเรียบร้อย!');
-        }
-
-        function renderCatalog(items) {
+            showDarkAlert(`อัปเดตเครดิตของ "${        function renderCatalog(items) {
             const container = document.getElementById('product-list');
             container.innerHTML = '';
 
             items.forEach(item => {
                 const count = stockCounts[item.id] || 0;
-                const displayStock = count > 0 ? count : 'พร้อมส่ง (สุ่มจำลอง)';
+                const displayStock = count > 0 ? count : 'พร้อมส่ง';
                 const el = document.createElement('div');
                 el.className = 'bg-[#10131e] border border-slate-800/90 rounded-2xl p-4 sm:p-5 flex flex-col justify-between card-hover';
                 el.innerHTML = `
@@ -838,7 +826,7 @@
 
         function copyText(text) {
             navigator.clipboard.writeText(text);
-            alert('คัดลอกรหัสเรียบร้อย: ' + text);
+            showDarkAlert('คัดลอกรหัสเรียบร้อย: ' + text, 'คัดลอกสำเร็จ', '📋');
         }
 
         function addToCart(id) {
@@ -880,10 +868,10 @@
             const code = document.getElementById('promo-input').value.trim().toUpperCase();
             if (code === 'OHM50') {
                 discount = 50;
-                alert('ใช้โค้ด OHM50 สำเร็จ! ลดทันที 50 บาท');
+                showDarkAlert('ใช้โค้ดส่วนลด OHM50 สำเร็จ! ลดทันที 50 บาท', 'ใช้โค้ดสำเร็จ', '🎟️');
             } else {
                 discount = 0;
-                alert('โค้ดส่วนลดไม่ถูกต้อง (ลองใช้โค้ด OHM50)');
+                showDarkAlert('โค้ดส่วนลดไม่ถูกต้อง (ลองใช้โค้ด OHM50)', 'โค้ดไม่ถูกต้อง', '⚠️');
             }
             updateCartTotal();
         }
@@ -900,12 +888,13 @@
         async function checkout() {
             if (!currentUser) {
                 closeModal('cart-modal');
-                alert('กรุณาเข้าสู่ระบบหรือสมัครสมาชิกก่อนสั่งซื้อครับ');
-                openAuthModal('login');
+                showDarkAlert('กรุณาเข้าสู่ระบบหรือสมัครสมาชิกก่อนสั่งซื้อครับ', 'ยังไม่ได้เข้าสู่ระบบ', '🔐', () => {
+                    openAuthModal('login');
+                });
                 return;
             }
             if (cart.length === 0) {
-                alert('กรุณาเลือกสินค้าใส่ตะกร้าก่อนครับ');
+                showDarkAlert('กรุณาเลือกสินค้าใส่ตะกร้าก่อนครับ', 'ตะกร้าว่างเปล่า', '🛒');
                 return;
             }
 
@@ -914,13 +903,13 @@
 
             const total = updateCartTotal();
             if (Number(currentUser.credit) < total) {
-                alert(`ยอดเครดิตไม่เพียงพอ (คงเหลือ ฿${currentUser.credit} / ต้องชำระ ฿${total}) กรุณาเติมเครดิตก่อนครับ`);
-                closeModal('cart-modal');
-                openTopupModal();
+                showDarkAlert(`ยอดเครดิตไม่เพียงพอ (คงเหลือ ฿${currentUser.credit} / ต้องชำระ ฿${total}) กรุณาเติมเครดิตก่อนครับ`, 'เครดิตไม่เพียงพอ', '💸', () => {
+                    closeModal('cart-modal');
+                    openTopupModal();
+                });
                 return;
             }
 
-            // ดึงรหัสจำลองจากสต็อก หรือสุ่มรหัสจำลองใหม่ให้ทันที
             const orderRows = [];
             for (const item of cart) {
                 const { data: stockItem } = await db.from('ohmshop_stock')
@@ -958,8 +947,9 @@
             discount = 0;
             document.getElementById('cart-count').innerText = '0';
             closeModal('cart-modal');
-            alert('สั่งซื้อสำเร็จ! ระบบส่งรหัสจำลองเข้าเมนู "ประวัติคำสั่งซื้อ" เรียบร้อยแล้ว');
-            openHistoryModal();
+            showDarkAlert('สั่งซื้อสำเร็จ! ระบบส่งรหัสเข้าเมนู "ประวัติคำสั่งซื้อ" เรียบร้อยแล้ว', 'สั่งซื้อสำเร็จ', '🎉', () => {
+                openHistoryModal();
+            });
         }
 
         function openTopupModal() {
@@ -973,8 +963,8 @@
         }
 
         function submitTopup() {
-            alert('แจ้งเติมเงินเรียบร้อย! แอดมิน OHM สามารถกดเพิ่มเครดิตให้คุณจากหน้าหลังบ้านได้ทันที');
             closeModal('topup-modal');
+            showDarkAlert('แจ้งเติมเงินเรียบร้อย! แอดมิน OHM สามารถกดเพิ่มเครดิตให้คุณจากหน้าหลังบ้านได้ทันที', 'ส่งแจ้งเตือนแล้ว', '💳');
         }
 
         async function openHistoryModal() {
@@ -1006,7 +996,7 @@
                         <div class="text-xs sm:text-sm font-semibold text-white">📦 รายการที่ซื้อ: ${o.title}</div>
                         <div class="bg-[#111420] border border-emerald-500/30 rounded-lg p-2.5 flex items-center justify-between gap-2">
                             <div class="truncate">
-                                <div class="text-[10px] text-slate-400">รหัสจำลองที่ได้รับ (User : Pass)</div>
+                                <div class="text-[10px] text-slate-400">รหัสที่ได้รับ (User : Pass)</div>
                                 <div class="font-eng text-xs sm:text-sm font-bold text-emerald-400 select-all">${o.account}</div>
                             </div>
                             <button onclick="copyText('${o.account.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold shrink-0">
